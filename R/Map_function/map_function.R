@@ -22,7 +22,7 @@ pro_map <- function(map_type, df, col_pallet, addtiles, border_col, legend_label
     df$summary,df$name) %>% 
     lapply(htmltools::HTML)
   
-  county <- st_read("data/county.shp")
+  county <- st_read("data/mi_polygons.shp")
   tract <- st_read("data/tract.shp")
   
   pihp = aggregate(x = county[, "estimate"], 
