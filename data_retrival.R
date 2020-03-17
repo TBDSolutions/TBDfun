@@ -7,13 +7,13 @@ library(tidycensus)
 library(stringr)
 library(sf)
 
-#Download the MI geography dataset 
-county <- get_acs(geography = "county",
-                       variables = "B01003_001",
-                       state = "MI",
-                       geometry = TRUE)
-
-st_write(county, "data/county.shp")
+# #Download the MI geography dataset 
+# county <- get_acs(geography = "county",
+#                        variables = "B01003_001",
+#                        state = "MI",
+#                        geometry = TRUE)
+# 
+# st_write(county, "data/county.shp")
 
 #Download the MI census tract geography dataset 
 tract <- get_acs(geography = "tract",
