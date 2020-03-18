@@ -59,7 +59,7 @@ dynamic_map <- function(map_type,
 
   col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
 
-  map <- if(map_type == "County"){
+  map <- if(grepl("County", map_type, ignore.case = T)){
 
     map <- leaflet(county) %>%
       addTiles() %>%
@@ -93,7 +93,7 @@ dynamic_map <- function(map_type,
 
   }
 
-  else if(map_type == "PIHP"){
+  else if(grepl("PIHP", map_type, ignore.case = T)){
 
     map <- leaflet(pihp) %>%
       addTiles() %>%
@@ -163,7 +163,7 @@ dynamic_map <- function(map_type,
 
     print(map)
   }
-  else if(map_type == "CMHSP"){
+  else if(grepl("CMHSP", map_type, ignore.case = T)){
 
     map <- leaflet(cmhsp) %>%
       addTiles() %>%
@@ -215,7 +215,7 @@ dynamic_map <- function(map_type,
 
     print(map)
   }
-  else if(map_type == "tract"){
+  else if(grepl("tract", map_type, ignore.case = T)){
 
     map <- leaflet(tract) %>%
       addTiles() %>%
@@ -292,7 +292,7 @@ static_map <- function(map_type, df,
 
   col_dist <- colorBin(c(col_pallet),df$summary, reverse = T, na.color = "grey")
 
-  map <- if(map_type == "county"){
+  map <- if(grepl("county", map_type, ignore.case = T)){
 
     map <- leaflet(county) %>%
       addTiles() %>%
@@ -325,7 +325,7 @@ static_map <- function(map_type, df,
     print(map)
 
   }
-  else if(map_type == "pihp"){
+  else if(grepl("pihp", map_type, ignore.case = T)){
 
     map <- leaflet(pihp) %>%
       addTiles() %>%
@@ -357,7 +357,7 @@ static_map <- function(map_type, df,
 
     print(map)
   }
-  else if(map_type == "cmhsp"){
+  else if(grepl("cmhsp", map_type, ignore.case = T)){
 
     map <- leaflet(cmhsp) %>%
       addTiles() %>%
@@ -389,7 +389,7 @@ static_map <- function(map_type, df,
 
     print(map)
   }
-  else if(map_type == "tract"){
+  else if(grepl("tract", map_type, ignore.case = T)){
 
     map <- leaflet(tract) %>%
       addTiles() %>%
