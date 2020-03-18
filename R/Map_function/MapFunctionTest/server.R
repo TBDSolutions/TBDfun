@@ -61,7 +61,7 @@ output$map<-renderLeaflet({
   #  req(data())
     ds<-as.data.frame(data())
     
-    pro_map(map_type = org_input(), 
+    static_map(map_type = org_input(), 
             df = ds, 
             col_pallet = "viridis", 
             addtiles = "Stamen.TonerLite", 
