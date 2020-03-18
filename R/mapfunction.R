@@ -1,10 +1,5 @@
 
-library(magrittr);library(tidyverse)
-library(viridis); library(maps); library(tigris); library(leaflet)
-library(tidycensus)
-library(stringr)
-library(sf)
-
+#Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
 dynamic_map <- function(map_type,
                         df,
                         pihp_filter,
@@ -12,8 +7,13 @@ dynamic_map <- function(map_type,
                         col_pallet = "viridis",
                         addtiles = "Stamen.TonerLite",
                         border_col = "white",
-                        bins = c(0,1,3,5,10,15,20,25,30,35,45,55,60),
+                        bins = c(0,1,3,5,10,15,20,25,30,35,45,50),
                         legend_label = "range") {
+
+  if(!require(pacman))utils::install.packages("pacman")
+  pacman::p_load("sf", "tidyverse", "magrittr", "viridis", "maps", "tigris", "leaflet","tidycensus", "stringr")
+  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
+  library(tidycensus);library(stringr);library(sf)
 
   county_label <- sprintf(
     "<strong>%g </strong><br/><strong>%s county</strong><br/>",
@@ -255,12 +255,16 @@ dynamic_map <- function(map_type,
 }
 
 ## Static Function
-
+#Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
 static_map <- function(map_type, df,
                        col_pallet = "viridis",
                        addtiles = "Stamen.TonerLite",
                        border_col = "white",
                        legend_label = "range") {
+  if(!require(pacman))utils::install.packages("pacman")
+  pacman::p_load("sf", "tidyverse", "magrittr", "viridis", "maps", "tigris", "leaflet","tidycensus", "stringr")
+  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
+  library(tidycensus);library(stringr);library(sf)
 
   county_label <- sprintf(
     "<strong>%g </strong><br/><strong>%s county</strong><br/>",
