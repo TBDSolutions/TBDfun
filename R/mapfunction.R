@@ -1,3 +1,5 @@
+library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
+library(tidycensus);library(stringr);library(sf)
 
 #Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
 dynamic_map <- function(map_type,
@@ -9,11 +11,6 @@ dynamic_map <- function(map_type,
                         border_col = "white",
                         bins = c(0,1,3,5,10,15,20,25,30,35,45,50),
                         legend_label = "range") {
-
-  if(!require(pacman))utils::install.packages("pacman")
-  pacman::p_load("sf", "tidyverse", "magrittr", "viridis", "maps", "tigris", "leaflet","tidycensus", "stringr")
-  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
-  library(tidycensus);library(stringr);library(sf)
 
   county_label <- sprintf(
     "<strong>%g </strong><br/><strong>%s county</strong><br/>",
@@ -261,10 +258,6 @@ static_map <- function(map_type, df,
                        addtiles = "Stamen.TonerLite",
                        border_col = "white",
                        legend_label = "range") {
-  if(!require(pacman))utils::install.packages("pacman")
-  pacman::p_load("sf", "tidyverse", "magrittr", "viridis", "maps", "tigris", "leaflet","tidycensus", "stringr")
-  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
-  library(tidycensus);library(stringr);library(sf)
 
   county_label <- sprintf(
     "<strong>%g </strong><br/><strong>%s county</strong><br/>",
