@@ -259,6 +259,21 @@ static_map <- function(map_type, df,
                        border_col = "white",
                        legend_label = "range") {
 
+  county_reference<-read.csv("data/county_reference.csv")
+  tract_reference<-read.csv("data/tract_reference.csv")
+
+  if(names(df) == "countyid"){
+    df<-df %>%
+      inner_join(county_reference, by = c("countyid" = "GEOID"))%>%
+      rename(name = NAME)
+  }
+
+  if(names(df) == "tractid"){
+    df<-df %>%
+      inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
+      rename(name = NAME)
+  }
+
   county_label <- sprintf(
     "<strong>%g </strong><br/><strong>%s county</strong><br/>",
     df$summary,df$name) %>%
@@ -424,4 +439,3 @@ static_map <- function(map_type, df,
 
   return(map)
 }
-
