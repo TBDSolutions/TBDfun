@@ -1,11 +1,14 @@
-Package: TBDfun
+Package: mapfun
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: creating leaflet map 
+Version: 0.2.0
+Author: prodigy
+Maintainer: The package maintainer <venkaiahp@prodigygroupindia.com> and <giridhark@prodigygroupindia.com>
+Description: This package consists of 2 functions, one function creates a static map which is basic map of county or
+    PIHP or CMHSP and another function creates a dynamic map function that can be used in a shiny application.
+    You create a Leaflet map with these basic steps:
+    Create a map widget by calling leaflet().
+    Add layers (i.e., features) to the map by using layer functions (e.g. addTiles, addMarkers, addPolygons) to modify the map widget.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
