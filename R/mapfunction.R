@@ -42,8 +42,9 @@ dynamic_map <- function(map_type,
     cmh_filter$summary,cmh_filter$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read("data/mi_polygons.shp")
-  tract <- st_read("data/tract.shp")
+  county <- st_read(system.file("/data//mi_polygons.shp", package = "mapfun"))
+
+  tract <- st_read(system.file("/data//tract.shp", package = "mapfun"))
 
   pihp = aggregate(x = county[, "estimate"],
                    by = list(county$PIHP),
@@ -259,8 +260,8 @@ static_map <- function(map_type, df,
                        border_col = "white",
                        legend_label = "range") {
 
-  county_reference<-read.csv("data/county_reference.csv")
-  tract_reference<-read.csv("data/tract_reference.csv")
+  county_reference<-read.csv(url("https://raw.githubusercontent.com/KandeyGiridhar2109/myfirstpackage/master/data/county_reference.csv"))
+  tract_reference<-read.csv(url("https://raw.githubusercontent.com/KandeyGiridhar2109/myfirstpackage/master/data/tract_reference.csv"))
 
   if(names(df) == "countyid"){
     df<-df %>%
@@ -272,6 +273,14 @@ static_map <- function(map_type, df,
     df<-df %>%
       inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
       rename(name = NAME)
+  }
+
+  if(grepl("county", map_type, ignore.case = T)){
+
+  df <- county_reference %>%
+    left_join(df, by = c("NAME" = "name")) %>%
+    rename(name = NAME)
+    df$summary <- as.numeric(df$summary)
   }
 
   county_label <- sprintf(
@@ -294,8 +303,9 @@ static_map <- function(map_type, df,
     df$summary,df$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read("data/mi_polygons.shp")
-  tract <- st_read("data/tract.shp")
+  county <- st_read(system.file("/data//mi_polygons.shp", package = "mapfun"))
+
+  tract <- st_read(system.file("/data//tract.shp", package = "mapfun"))
 
   pihp = aggregate(x = county[, "estimate"],
                    by = list(county$PIHP),
