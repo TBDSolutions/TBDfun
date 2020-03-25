@@ -88,7 +88,7 @@ dynamic_map <- function(map_type,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
 
@@ -160,7 +160,7 @@ dynamic_map <- function(map_type,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
@@ -212,7 +212,7 @@ dynamic_map <- function(map_type,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
@@ -244,7 +244,7 @@ dynamic_map <- function(map_type,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
@@ -260,8 +260,8 @@ static_map <- function(map_type, df,
                        border_col = "white",
                        legend_label = "range") {
 
-  county_reference<-read.csv(url("https://raw.githubusercontent.com/KandeyGiridhar2109/myfirstpackage/master/data/county_reference.csv"))
-  tract_reference<-read.csv(url("https://raw.githubusercontent.com/KandeyGiridhar2109/myfirstpackage/master/data/tract_reference.csv"))
+  county_reference<-read.csv(system.file("extdata", "county_reference.csv", package = "mapfun"))
+  tract_reference<-read.csv(system.file("extdata", "tract_reference.csv", package = "mapfun"))
 
   if(names(df) == "countyid"){
     df<-df %>%
@@ -345,7 +345,7 @@ static_map <- function(map_type, df,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
 
@@ -378,7 +378,7 @@ static_map <- function(map_type, df,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
@@ -410,7 +410,7 @@ static_map <- function(map_type, df,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
@@ -442,7 +442,7 @@ static_map <- function(map_type, df,
                          opacity = 0.7,
                          title = legend_label,
                          position = "bottomright",
-                         na.label = "red")
+                         na.label = "NA")
 
     print(map)
   }
