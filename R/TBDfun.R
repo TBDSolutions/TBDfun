@@ -42,9 +42,9 @@ dynamic_map <- function(map_type,
     cmh_filter$summary,cmh_filter$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read(system.file("/data//mi_polygons.shp", package = "mapfun"))
+  county <- st_read(system.file("/data//mi_polygons.shp", package = "TBDfun"))
 
-  tract <- st_read(system.file("/data//tract.shp", package = "mapfun"))
+  tract <- st_read(system.file("/data//tract.shp", package = "TBDfun"))
 
   pihp = aggregate(x = county[, "estimate"],
                    by = list(county$PIHP),
@@ -260,8 +260,8 @@ static_map <- function(map_type, df,
                        border_col = "white",
                        legend_label = "range") {
 
-  county_reference<-read.csv(system.file("extdata", "county_reference.csv", package = "mapfun"))
-  tract_reference<-read.csv(system.file("extdata", "tract_reference.csv", package = "mapfun"))
+  county_reference<-read.csv(system.file("extdata", "county_reference.csv", package = "TBDfun"))
+  tract_reference<-read.csv(system.file("extdata", "tract_reference.csv", package = "TBDfun"))
 
   if(names(df) == "countyid"){
     df<-df %>%
@@ -303,9 +303,9 @@ static_map <- function(map_type, df,
     df$summary,df$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read(system.file("/data//mi_polygons.shp", package = "mapfun"))
+  county <- st_read(system.file("/data//mi_polygons.shp", package = "TBDfun"))
 
-  tract <- st_read(system.file("/data//tract.shp", package = "mapfun"))
+  tract <- st_read(system.file("/data//tract.shp", package = "TBDfun"))
 
   pihp = aggregate(x = county[, "estimate"],
                    by = list(county$PIHP),
