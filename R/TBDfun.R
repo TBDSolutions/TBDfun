@@ -65,20 +65,29 @@ dynamic_map <- function(map_type,
     cmh_filter$summary,cmh_filter$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read(system.file("/data//mi_polygons.shp", package = "TBDfun"))
-  tract <- st_read(system.file("/data//tract.shp", package = "TBDfun"))
+  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
 
-  pihp = aggregate(x = county[, "estimate"],
-                   by = list(county$PIHP),
-                   FUN = sum, na.rm = TRUE)
+  ###county shape file ##
+  county <- mi_master_polygons %>%
+    group_by(county) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
 
-  pihp_fil <- pihp %>% filter(Group.1 == pihp_filter$name)
+  ###pihp shape file ##
+  pihp <- mi_master_polygons %>%
+    group_by(PIHP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
 
-  cmhsp = aggregate(x = county[, "estimate"],
-                    by = list(county$CMHSP),
-                    FUN = sum, na.rm = TRUE)
+  ###cmhsp shape file ##
+  cmhsp <- mi_master_polygons %>%
+    group_by(CMHSP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
 
-  cmh_fil <- cmhsp %>% filter(Group.1 == cmh_filter$name)
+  pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
+
+  cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
 
   col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
 
@@ -325,16 +334,25 @@ static_map <- function(map_type, df,
     df$summary,df$name) %>%
     lapply(htmltools::HTML)
 
-  county <- st_read(system.file("/data//mi_polygons.shp", package = "TBDfun"))
-  tract <- st_read(system.file("/data//tract.shp", package = "TBDfun"))
+  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
 
-  pihp = aggregate(x = county[, "estimate"],
-                   by = list(county$PIHP),
-                   FUN = sum, na.rm = TRUE)
+  ###county shape file ##
+  county <- mi_master_polygons %>%
+    group_by(county) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
 
-  cmhsp = aggregate(x = county[, "estimate"],
-                    by = list(county$CMHSP),
-                    FUN = sum, na.rm = TRUE)
+  ###pihp shape file ##
+  pihp <- mi_master_polygons %>%
+    group_by(PIHP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  ###cmhsp shape file ##
+  cmhsp <- mi_master_polygons %>%
+    group_by(CMHSP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
 
   col_dist <- colorBin(c(col_pallet),df$summary, reverse = T, na.color = "grey")
 
