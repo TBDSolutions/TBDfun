@@ -85,6 +85,12 @@ dynamic_map <- function(map_type,
     summarize(
       population = sum(estimate, na.rm = TRUE))
 
+  ###tract shape file ##
+  tract <- mi_master_polygons %>%
+    group_by(NAME) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
   pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
 
   cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
@@ -351,6 +357,12 @@ static_map <- function(map_type, df,
   ###cmhsp shape file ##
   cmhsp <- mi_master_polygons %>%
     group_by(CMHSP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  ###tract shape file ##
+  tract <- mi_master_polygons %>%
+    group_by(NAME) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
 
