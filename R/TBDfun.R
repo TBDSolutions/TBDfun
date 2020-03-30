@@ -12,26 +12,64 @@ dynamic_map <- function(map_type,
                         bins = c(0,1,3,5,10,15,20,25,30,35,45,50),
                         legend_label = "range") {
 
-  county_reference<-read.csv(system.file("extdata", "county_reference.csv", package = "TBDfun"))
-  tract_reference<-read.csv(system.file("extdata", "tract_reference.csv", package = "TBDfun"))
+  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
+
+  ###county shape file ##
+  county <- mi_master_polygons %>%
+    group_by(county) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  ###pihp shape file ##
+  pihp <- mi_master_polygons %>%
+    group_by(PIHP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  ###cmhsp shape file ##
+  cmhsp <- mi_master_polygons %>%
+    group_by(CMHSP) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  ###tract shape file ##
+  tract <- mi_master_polygons %>%
+    group_by(NAME) %>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+
+  pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
+
+  cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
+
+  county_reference<-mi_master_polygons[,c(1,4,6)]
+  county_reference$GEOID<-substr(county_reference$GEOID, 1, 5)
+  county_reference<-county_reference %>%
+    group_by(GEOID,county)%>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+  county_reference$geometry<-NULL
+  county_reference$population<-NULL
+  tract_reference<-mi_master_polygons[,c(1,2)]
+  tract_reference$geometry<-NULL
 
   if(names(df) == "countyid"){
     df<-df %>%
       inner_join(county_reference, by = c("countyid" = "GEOID"))%>%
-      rename(name = NAME)
+      rename(name = county)
   }
 
   if(names(df) == "tractid"){
     df<-df %>%
       inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
-      rename(name = NAME)
+      rename(name = county)
   }
 
   if(grepl("county", map_type, ignore.case = T)){
 
     df <- county_reference %>%
-      left_join(df, by = c("NAME" = "name")) %>%
-      rename(name = NAME)
+      left_join(df, by = c("county" = "name")) %>%
+      rename(name = county)
     df$summary <- as.numeric(df$summary)
   }
 
@@ -65,35 +103,6 @@ dynamic_map <- function(map_type,
     cmh_filter$summary,cmh_filter$name) %>%
     lapply(htmltools::HTML)
 
-  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
-
-  ###county shape file ##
-  county <- mi_master_polygons %>%
-    group_by(county) %>%
-    summarize(
-      population = sum(estimate, na.rm = TRUE))
-
-  ###pihp shape file ##
-  pihp <- mi_master_polygons %>%
-    group_by(PIHP) %>%
-    summarize(
-      population = sum(estimate, na.rm = TRUE))
-
-  ###cmhsp shape file ##
-  cmhsp <- mi_master_polygons %>%
-    group_by(CMHSP) %>%
-    summarize(
-      population = sum(estimate, na.rm = TRUE))
-
-  ###tract shape file ##
-  tract <- mi_master_polygons %>%
-    group_by(NAME) %>%
-    summarize(
-      population = sum(estimate, na.rm = TRUE))
-
-  pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
-
-  cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
 
   col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
 
@@ -297,49 +306,6 @@ static_map <- function(map_type, df,
                        border_col = "white",
                        legend_label = "range") {
 
-  county_reference<-read.csv(system.file("extdata", "county_reference.csv", package = "TBDfun"))
-  tract_reference<-read.csv(system.file("extdata", "tract_reference.csv", package = "TBDfun"))
-
-  if(names(df) == "countyid"){
-    df<-df %>%
-      inner_join(county_reference, by = c("countyid" = "GEOID"))%>%
-      rename(name = NAME)
-  }
-
-  if(names(df) == "tractid"){
-    df<-df %>%
-      inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
-      rename(name = NAME)
-  }
-
-  if(grepl("county", map_type, ignore.case = T)){
-
-  df <- county_reference %>%
-    left_join(df, by = c("NAME" = "name")) %>%
-    rename(name = NAME)
-    df$summary <- as.numeric(df$summary)
-  }
-
-  county_label <- sprintf(
-    "<strong>%g </strong><br/><strong>%s county</strong><br/>",
-    df$summary,df$name) %>%
-    lapply(htmltools::HTML)
-
-  pihp_label <- sprintf(
-    "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
-    df$summary,df$name) %>%
-    lapply(htmltools::HTML)
-
-  cmhsp_label <- sprintf(
-    "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
-    df$summary,df$name) %>%
-    lapply(htmltools::HTML)
-
-  tract_label <- sprintf(
-    "<strong>%g </strong><br/><strong>%s tract</strong><br/>",
-    df$summary,df$name) %>%
-    lapply(htmltools::HTML)
-
   mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
 
   ###county shape file ##
@@ -365,6 +331,58 @@ static_map <- function(map_type, df,
     group_by(NAME) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
+
+  county_reference<-mi_master_polygons[,c(1,4,6)]
+  county_reference$GEOID<-substr(county_reference$GEOID, 1, 5)
+  county_reference<-county_reference %>%
+    group_by(GEOID,county)%>%
+    summarize(
+      population = sum(estimate, na.rm = TRUE))
+  county_reference$geometry<-NULL
+  county_reference$population<-NULL
+  tract_reference<-mi_master_polygons[,c(1,2)]
+  tract_reference$geometry<-NULL
+
+  if(names(df) == "countyid"){
+    df<-df %>%
+      inner_join(county_reference, by = c("countyid" = "GEOID"))%>%
+      rename(name = county)
+  }
+
+  if(names(df) == "tractid"){
+    df<-df %>%
+      inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
+      rename(name = NAME)
+  }
+
+  if(grepl("county", map_type, ignore.case = T)){
+
+  df <- county_reference %>%
+    left_join(df, by = c("county" = "name")) %>%
+    rename(name = county)
+    df$summary <- as.numeric(df$summary)
+  }
+
+  county_label <- sprintf(
+    "<strong>%g </strong><br/><strong>%s county</strong><br/>",
+    df$summary,df$name) %>%
+    lapply(htmltools::HTML)
+
+  pihp_label <- sprintf(
+    "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
+    df$summary,df$name) %>%
+    lapply(htmltools::HTML)
+
+  cmhsp_label <- sprintf(
+    "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
+    df$summary,df$name) %>%
+    lapply(htmltools::HTML)
+
+  tract_label <- sprintf(
+    "<strong>%g </strong><br/><strong>%s tract</strong><br/>",
+    df$summary,df$name) %>%
+    lapply(htmltools::HTML)
+
 
   col_dist <- colorBin(c(col_pallet),df$summary, reverse = T, na.color = "grey")
 
