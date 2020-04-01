@@ -19,3 +19,5 @@ Load the package using:
 ```
 library(TBDfun)
 ```
+
+In order to allow for easy auto-completion using the IDE, functions in this package have the prefix `tbd_`.  Wherever possible, the first argument passed to the function is a dataframe, which allows for use in piped chains (i.e. using `%>%`).
