@@ -1,7 +1,7 @@
 Package: TBDfun
 Type: Package
 Title: creating leaflet map 
-Version: 0.2.0
+Version: 0.3.0
 Author: prodigy
 Maintainer: The package maintainer <venkaiahp@prodigygroupindia.com> and <giridhark@prodigygroupindia.com>
 Description: This package consists of 2 functions, one function creates a static map which is basic map of county or
@@ -12,3 +12,4 @@ Description: This package consists of 2 functions, one function creates a static
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.0

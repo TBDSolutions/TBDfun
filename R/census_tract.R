@@ -1,14 +1,4 @@
-#' Title
-#'
-#' @param ask1
-#' @param ask2
-#' @param ask
-#'
-#' @return
-#' @export
-#'
-#' @examples
-census <- function(ask1,ask2,ask){
+census <- function(read_database,sql_query,write_database){
   library(httr)
   library(tidyverse)
   library(devtools)
@@ -23,13 +13,13 @@ census <- function(ask1,ask2,ask){
   connection <- DBI::dbConnect(odbc::odbc(),
                                Driver = "SQL Server",
                                Server = Sys.getenv("tbd_server_address"),
-                               Database =  paste(ask1),
+                               Database =  paste(read_database),
                                UID = Sys.getenv("tbd_server_uid"),
                                PWD = Sys.getenv("tbd_server_pw"),
                                Port = 1433)
 
   #Query to fetch the data from SQL
-  Census_Tract<- DBI::dbGetQuery(connection, paste(ask2))
+  Census_Tract<- DBI::dbGetQuery(connection, paste(sql_query))
 
   names(Census_Tract) <- NULL
 
@@ -75,7 +65,7 @@ census <- function(ask1,ask2,ask){
 
   #Storing the formated output in the database
   dbWriteTable(conn = connection,
-               name = paste(ask),
+               name = paste(write_database),
                value = df_output,
                overwrite = T)
 }

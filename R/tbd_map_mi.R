@@ -1,9 +1,39 @@
-library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
-library(tidycensus);library(stringr);library(sf)
+#' \title{ Dynamic Map Function
+#' }
+#'
+#' \description{
+#
+#' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column i.e... summarized number.
+#
+#' map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
+#
+#' pihp_fill : A PIHP filtered dataset must be provided to filter the selected PIHP and highlight the boundaries of the selected PIHP.
+#
+#' cmh_fill : A CMHSP filtered dataset must be provided to filter the selected CMHSP and highlight the boundaries of the selected CMHSP.
+#
+#' col_palette : Choose a color palette of any choice to populate the summarized data.
+#
+#' add tiles : Add a tile layer from a known map provider.
+#
+#' border_col : Fill border color.
+#
+#' bins : Give the bins range in a collection.
+#
+#' legend_label : Label of the legend.
+#' }
+#'
+#' @param df A dataframe
+#' @param map_type A map type ()
+#'
+#'
+#' @return
+#' @export
+#'
 
 #Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
-dynamic_map <- function(map_type,
-                        df,
+
+dynamic_map <- function(df,
+                        map_type,
                         pihp_filter,
                         cmh_filter,
                         col_pallet = "viridis",
@@ -11,6 +41,9 @@ dynamic_map <- function(map_type,
                         border_col = "white",
                         bins = c(0,1,3,5,10,15,20,25,30,35,45,50),
                         legend_label = "range") {
+
+  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
+  library(tidycensus);library(stringr);library(sf)
 
   mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
 
@@ -298,13 +331,28 @@ dynamic_map <- function(map_type,
   return(map)
 }
 
-## Static Function
+#'  Static map function
+#'
+#' @param df A dataframe
+#' @param ask2
+#'
+#'
+#' @return
+#' @export
+#'
+
+
 #Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
-static_map <- function(map_type, df,
+
+static_map <- function(df,
+                       map_type,
                        col_pallet = "viridis",
                        addtiles = "Stamen.TonerLite",
                        border_col = "white",
                        legend_label = "range") {
+
+  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
+  library(tidycensus);library(stringr);library(sf)
 
   mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
 
@@ -357,9 +405,9 @@ static_map <- function(map_type, df,
 
   if(grepl("county", map_type, ignore.case = T)){
 
-  df <- county_reference %>%
-    left_join(df, by = c("county" = "name")) %>%
-    rename(name = county)
+    df <- county_reference %>%
+      left_join(df, by = c("county" = "name")) %>%
+      rename(name = county)
     df$summary <- as.numeric(df$summary)
   }
 
@@ -517,76 +565,4 @@ static_map <- function(map_type, df,
   }
 
   return(map)
-}
-
-census <- function(read_database,sql_query,write_database){
-  library(httr)
-  library(tidyverse)
-  library(devtools)
-  library(RCurl)
-  library(urltools)
-  library(DBI)
-  library(odbc)
-  library(RODBC)
-  library(svDialogs)
-
-  #Establish database connection
-  connection <- DBI::dbConnect(odbc::odbc(),
-                               Driver = "SQL Server",
-                               Server = Sys.getenv("tbd_server_address"),
-                               Database =  paste(read_database),
-                               UID = Sys.getenv("tbd_server_uid"),
-                               PWD = Sys.getenv("tbd_server_pw"),
-                               Port = 1433)
-
-  #Query to fetch the data from SQL
-  Census_Tract<- DBI::dbGetQuery(connection, paste(sql_query))
-
-  names(Census_Tract) <- NULL
-
-  #store the data in a temp .csv file
-  input <- tempfile(fileext = ".csv")
-  write.csv(Census_Tract, input, row.names = FALSE)
-
-  #Function to convert the input address to desiered output
-  apiurl <- "https://geocoding.geo.census.gov/geocoder/geographies/addressbatch"
-  list_output <- POST(apiurl, body= list(addressFile = upload_file(input),
-                                         benchmark = "Public_AR_Current",
-                                         vintage = "Current_Current"
-  ),
-  encode="multipart"
-  )
-
-  cat(content(list_output, "text", encoding = "UTF-8"), "\n")
-
-  #Storing the Encoded data in a file
-  cat(content(list_output, "text", encoding = "UTF-8"), file="output.csv")
-
-  #Converting the output to a data frame
-  df_output<-read.csv(file ="output.csv",header = FALSE,
-                      col.names = c("record_id_number"
-                                    ,"input_address"
-                                    ,"tiger_address_range_match_indicator"
-                                    ,"tiger_match_type"
-                                    ,"tiger_output_address"
-                                    ,"longitude_latitude"
-                                    ,"tigerline_id"
-                                    ,"tigerline_id_side"
-                                    ,"state_code"
-                                    ,"county_code"
-                                    ,"tract_code"
-                                    ,"block_code"))
-
-  #Removing the column headers from the output
-  #df_output=subset(df_output,df_output$input_address!="street_address, city, state, zip")
-
-  #store the output in a temp file
-  output <- tempfile(fileext = ".csv")
-  write.csv(df_output, output, row.names = FALSE)
-
-  #Storing the formated output in the database
-  dbWriteTable(conn = connection,
-               name = paste(write_database),
-               value = df_output,
-               overwrite = T)
 }
