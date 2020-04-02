@@ -1,3 +1,23 @@
+#' Census Tract
+#'
+#' \description{
+#
+#' read_database : The database that the data is expected to read. \cr \cr
+#
+#' sql_query : A SQL query to read the table. \cr \cr
+#
+#' write_database : The database that the output is expected to be loaded. \cr \cr
+#' }
+#' @param read_database A database name
+#' @param sql_query A SQL query (ex: select * from ...)
+#' @param write_database A database name
+#' @examples
+#' census(
+#'  read_database = xyz,
+#'  sql_query = "select * from table name",
+#'  write_database = xyz,
+#')
+
 census <- function(read_database,sql_query,write_database){
   library(httr)
   library(tidyverse)

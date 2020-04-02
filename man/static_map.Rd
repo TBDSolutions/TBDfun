@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbd_map_mi.R
 \name{static_map}
 \alias{static_map}
-\title{Static map function}
+\title{Static Map Function}
 \usage{
 static_map(
   df,
@@ -16,11 +16,37 @@ static_map(
 \arguments{
 \item{df}{A dataframe}
 
-\item{ask2}{}
+\item{map_type}{A map type (Available map types are tract, county, cmhsp, pihp)}
+
+\item{col_pallet}{A color pelette}
+
+\item{addtiles}{A provider tile}
+
+\item{border_col}{Prefered border color}
+
+\item{legend_label}{Prefered label of the legend}
 }
 \value{
-
+A basic map of tract or county or cmhsp or pihp
 }
 \description{
-Static map function
+\description{
+df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
+i.e... summarized number. \cr \cr
+map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument,
+ Valid values are county, pihp, cmhsp, tract. \cr \cr
+col_palette : Choose a color palette of any choice to populate the summarized data. \cr \cr
+add tiles : Add a tile layer from a known map provider. \cr \cr
+border_col : Fill border color. \cr \cr
+legend_label : Label of the legend. \cr \cr
+}
+}
+\examples{
+static_map(
+ df = dataframe,
+map_type = county,
+col_pallet = "viridis",
+addtiles = "Stamen.TonerLite",
+border_col = "white",
+legend_label = "range")
 }

@@ -1,36 +1,49 @@
-#' \title{ Dynamic Map Function
-#' }
+#' Dynamic Map Function
 #'
 #' \description{
 #
-#' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column i.e... summarized number.
+#' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
+#' i.e... summarized number. \cr \cr
 #
-#' map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
+#' map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument,
+#'  Valid values are county, pihp, cmhsp, tract. \cr \cr
 #
-#' pihp_fill : A PIHP filtered dataset must be provided to filter the selected PIHP and highlight the boundaries of the selected PIHP.
+#' pihp_fill : A PIHP filtered dataset must be provided to filter the selected PIHP and highlight the
+#' boundaries of the selected PIHP. \cr \cr
 #
-#' cmh_fill : A CMHSP filtered dataset must be provided to filter the selected CMHSP and highlight the boundaries of the selected CMHSP.
+#' cmh_fill : A CMHSP filtered dataset must be provided to filter the selected CMHSP and highlight the
+#' boundaries of the selected CMHSP. \cr \cr
 #
-#' col_palette : Choose a color palette of any choice to populate the summarized data.
+#' col_palette : Choose a color palette of any choice to populate the summarized data. \cr \cr
 #
-#' add tiles : Add a tile layer from a known map provider.
+#' add tiles : Add a tile layer from a known map provider. \cr \cr
 #
-#' border_col : Fill border color.
+#' border_col : Fill border color. \cr \cr
 #
-#' bins : Give the bins range in a collection.
+#' bins : Give the bins range in a collection. \cr \cr
 #
-#' legend_label : Label of the legend.
+#' legend_label : Label of the legend. \cr \cr
 #' }
-#'
 #' @param df A dataframe
-#' @param map_type A map type ()
-#'
-#'
-#' @return
-#' @export
-#'
-
-#Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
+#' @param map_type A map type (Available map types are tract, county, cmhsp, pihp)
+#' @param pihp_filter A PIHP filtered dataframe
+#' @param cmh_filter A CMHSP filtered dataframe
+#' @param col_pallet A color pelette
+#' @param addtiles A provider tile
+#' @param border_col Prefered border color
+#' @param bins Prefered bin distribution
+#' @param legend_label Prefered label of the legend
+#' @examples
+#' dynamic_map(
+#'  map_type = input$group,
+#'   df = select_df,
+#'   pihp_filter = pihp_deaths_filt,
+#'   cmh_fillter = cmh_deaths_filt,
+#'   col_pallet = "viridis",
+#'   addtiles = "Stamen.TonerLite",
+#'   border_col = "white",
+#'   bins = c(0,1,3,5,10,15,20,25,30,35,45,55)
+#'   legend_label ="range")
 
 dynamic_map <- function(df,
                         map_type,
@@ -331,18 +344,39 @@ dynamic_map <- function(df,
   return(map)
 }
 
-#'  Static map function
+#' Static Map Function
 #'
+#' \description{
+#
+#' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
+#' i.e... summarized number. \cr \cr
+#
+#' map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument,
+#'  Valid values are county, pihp, cmhsp, tract. \cr \cr
+#
+#' col_palette : Choose a color palette of any choice to populate the summarized data. \cr \cr
+#
+#' add tiles : Add a tile layer from a known map provider. \cr \cr
+#
+#' border_col : Fill border color. \cr \cr
+#
+#' legend_label : Label of the legend. \cr \cr
+#' }
 #' @param df A dataframe
-#' @param ask2
-#'
-#'
-#' @return
-#' @export
-#'
-
-
-#Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument, Valid values are county, pihp, cmhsp, tract.
+#' @param map_type A map type (Available map types are tract, county, cmhsp, pihp)
+#' @param col_pallet A color pelette
+#' @param addtiles A provider tile
+#' @param border_col Prefered border color
+#' @param legend_label Prefered label of the legend
+#' @return A basic map of tract or county or cmhsp or pihp
+#' @examples
+#' static_map(
+#'  df = dataframe,
+#' map_type = county,
+#' col_pallet = "viridis",
+#' addtiles = "Stamen.TonerLite",
+#' border_col = "white",
+#' legend_label = "range")
 
 static_map <- function(df,
                        map_type,
