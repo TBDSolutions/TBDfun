@@ -36,7 +36,6 @@ dynamic_map(
 \item{legend_label}{Prefered label of the legend}
 }
 \description{
-\description{
 df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
 i.e... summarized number. \cr \cr
 map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument,
@@ -50,7 +49,6 @@ add tiles : Add a tile layer from a known map provider. \cr \cr
 border_col : Fill border color. \cr \cr
 bins : Give the bins range in a collection. \cr \cr
 legend_label : Label of the legend. \cr \cr
-}
 }
 \examples{
 dynamic_map(

@@ -1,6 +1,6 @@
 #' Dynamic Map Function
 #'
-#' \description{
+# \description{
 #
 #' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
 #' i.e... summarized number. \cr \cr
@@ -23,7 +23,7 @@
 #' bins : Give the bins range in a collection. \cr \cr
 #
 #' legend_label : Label of the legend. \cr \cr
-#' }
+# }
 #' @param df A dataframe
 #' @param map_type A map type (Available map types are tract, county, cmhsp, pihp)
 #' @param pihp_filter A PIHP filtered dataframe
@@ -346,7 +346,7 @@ dynamic_map <- function(df,
 
 #' Static Map Function
 #'
-#' \description{
+# \description{
 #
 #' df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
 #' i.e... summarized number. \cr \cr
@@ -361,7 +361,7 @@ dynamic_map <- function(df,
 #' border_col : Fill border color. \cr \cr
 #
 #' legend_label : Label of the legend. \cr \cr
-#' }
+# }
 #' @param df A dataframe
 #' @param map_type A map type (Available map types are tract, county, cmhsp, pihp)
 #' @param col_pallet A color pelette

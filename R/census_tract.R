@@ -1,13 +1,13 @@
 #' Census Tract
 #'
-#' \description{
+# \description{
 #
 #' read_database : The database that the data is expected to read. \cr \cr
 #
 #' sql_query : A SQL query to read the table. \cr \cr
 #
 #' write_database : The database that the output is expected to be loaded. \cr \cr
-#' }
+# }
 #' @param read_database A database name
 #' @param sql_query A SQL query (ex: select * from ...)
 #' @param write_database A database name

@@ -30,7 +30,6 @@ static_map(
 A basic map of tract or county or cmhsp or pihp
 }
 \description{
-\description{
 df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
 i.e... summarized number. \cr \cr
 map_type : Basic map with county or PIHP or CMHSP boundaries is drawn based on the map_type argument,
@@ -39,7 +38,6 @@ col_palette : Choose a color palette of any choice to populate the summarized da
 add tiles : Add a tile layer from a known map provider. \cr \cr
 border_col : Fill border color. \cr \cr
 legend_label : Label of the legend. \cr \cr
-}
 }
 \examples{
 static_map(
