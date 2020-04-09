@@ -1,41 +1,25 @@
 #' Census Tract
 #'
 # \description{
-#
-#' read_database : The database that the data is expected to read. \cr \cr
-#
-#' sql_query : A SQL query to read the table. \cr \cr
-#
-#' write_database : The database that the output is expected to be loaded. \cr \cr
+#' df : A dataframe
 # }
-#' @param read_database A database name
-#' @param sql_query A SQL query (ex: select * from ...)
-#' @param write_database A database name
-#' @examples
-#' census(
-#'  read_database = xyz,
-#'  sql_query = "select * from table name",
-#'  write_database = xyz,
-#')
+#' @example tbd_address_to_tract(df = dataframe)
+#' @param df A dataframe
+#' @import httr
+#' @import tidyverse
+#' @import devtools
+#' @import RCurl
+#' @import urltools
+#' @import DBI
+#' @import odbc
+#' @import RODBC
+#' @import svDialogs
+#' @import utils
+#' @export
 
-census <- function(read_database,sql_query,write_database){
+tbd_address_to_tract <- function(df){
 
-  library(httr); library(tidyverse); library(devtools)
-  library(RCurl); library(urltools); library(DBI); library(odbc)
-  library(RODBC); library(svDialogs)
-
-  #Establish database connection
-  connection <- DBI::dbConnect(odbc::odbc(),
-                               Driver = "SQL Server",
-                               Server = Sys.getenv("tbd_server_address"),
-                               Database =  paste(read_database),
-                               UID = Sys.getenv("tbd_server_uid"),
-                               PWD = Sys.getenv("tbd_server_pw"),
-                               Port = 1433)
-
-  #Query to fetch the data from SQL
-  Census_Tract <- DBI::dbGetQuery(connection, paste(sql_query))
-
+  Census_Tract <- df
   names(Census_Tract) <- NULL
 
   #store the data in a temp .csv file
@@ -55,13 +39,11 @@ census <- function(read_database,sql_query,write_database){
       encode="multipart"
     )
 
-  cat(content(list_output, "text", encoding = "UTF-8"), "\n")
-
   #Storing the Encoded data in a file
   cat(content(list_output, "text", encoding = "UTF-8"), file="output.csv")
 
   #Converting the output to a data frame
-  df_output <-
+  df_output <<-
     read.csv(
       file ="output.csv", header = FALSE,
       col.names = c(
@@ -71,20 +53,5 @@ census <- function(read_database,sql_query,write_database){
         ,"tract_code","block_code"
       )
     )
-
-  #Removing the column headers from the output
-  #df_output=subset(df_output,df_output$input_address!="street_address, city, state, zip")
-
-  #store the output in a temp file
-  output <- tempfile(fileext = ".csv")
-  write.csv(df_output, output, row.names = FALSE)
-
-  #Storing the formatted output in the database
-  dbWriteTable(
-    conn = connection,
-    name = paste(write_database),
-    value = df_output,
-    overwrite = T
-  )
 
 }

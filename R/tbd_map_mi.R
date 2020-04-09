@@ -44,6 +44,18 @@
 #'   border_col = "white",
 #'   bins = c(0,1,3,5,10,15,20,25,30,35,45,55)
 #'   legend_label ="range")
+#' @import magrittr
+#' @import tidyverse
+#' @import viridis
+#' @import maps
+#' @import tigris
+#' @import leaflet
+#' @import tidycensus
+#' @import stringr
+#' @import sf
+#' @import dplyr
+#' @import htmltools
+#' @export
 
 dynamic_map <- function(df,
                         map_type,
@@ -55,10 +67,19 @@ dynamic_map <- function(df,
                         bins = c(0,1,3,5,10,15,20,25,30,35,45,50),
                         legend_label = "range") {
 
-  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
-  library(tidycensus);library(stringr);library(sf)
+  if(requireNamespace("magrittr"))
+    if(requireNamespace("tidyverse"))
+      if(requireNamespace("viridis"))
+        if(requireNamespace("maps"))
+          if(requireNamespace("tigris"))
+            if(requireNamespace("leaflet"))
+              if(requireNamespace("tidycensus"))
+                if(requireNamespace("stringr"))
+                  if(requireNamespace("sf"))
+                    if(requireNamespace("dplyr"))
+                      if(requireNamespace("htmltools"))
 
-  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
+  mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 
   ###county shape file ##
   county <- mi_master_polygons %>%
@@ -377,7 +398,18 @@ dynamic_map <- function(df,
 #' addtiles = "Stamen.TonerLite",
 #' border_col = "white",
 #' legend_label = "range")
-
+#' @import magrittr
+#' @import tidyverse
+#' @import viridis
+#' @import maps
+#' @import tigris
+#' @import leaflet
+#' @import tidycensus
+#' @import stringr
+#' @import sf
+#' @import dplyr
+#' @import htmltools
+#' @export
 static_map <- function(df,
                        map_type,
                        col_pallet = "viridis",
@@ -385,10 +417,19 @@ static_map <- function(df,
                        border_col = "white",
                        legend_label = "range") {
 
-  library(magrittr);library(tidyverse);library(viridis); library(maps); library(tigris); library(leaflet)
-  library(tidycensus);library(stringr);library(sf)
+  if(requireNamespace("magrittr"))
+    if(requireNamespace("tidyverse"))
+      if(requireNamespace("viridis"))
+        if(requireNamespace("maps"))
+          if(requireNamespace("tigris"))
+            if(requireNamespace("leaflet"))
+              if(requireNamespace("tidycensus"))
+                if(requireNamespace("stringr"))
+                  if(requireNamespace("sf"))
+                    if(requireNamespace("dplyr"))
+                      if(requireNamespace("htmltools"))
 
-  mi_master_polygons <- st_read(system.file("/data//mi_master_polygons.shp", package = "TBDfun"))
+    mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 
   ###county shape file ##
   county <- mi_master_polygons %>%
