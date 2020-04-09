@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbd_address_to_tract.R
 \name{tbd_address_to_tract}
 \alias{tbd_address_to_tract}
-\title{Census Tract}
+\title{Address to Tract}
 \usage{
 tbd_address_to_tract(df)
 }
@@ -10,7 +10,8 @@ tbd_address_to_tract(df)
 \item{df}{A dataframe}
 }
 \description{
-df : A dataframe
+The function allows a dataframe as input and returns geocoded information using
+census tract API. The dataframe may not exceed 10,000 records.
 }
 \examples{
 \dontrun{

@@ -36,15 +36,15 @@
 #' @examples
 #' \dontrun{
 #' dynamic_map(
-#'   df = select_df,
-#'   map_type = input$group,
-#'   pihp_filter = pihp_deaths_filt,
-#'   cmh_fillter = cmh_deaths_filt,
-#'   col_pallet = "viridis",
-#'   addtiles = "Stamen.TonerLite",
-#'   border_col = "white",
-#'   bins = c(0,1,3,5,10,15,20,25,30,35,45,55),
-#'   legend_label ="range")
+#'    df = select_df,
+#'    map_type = input$group,
+#'    pihp_filter = pihp_deaths_filt,
+#'    cmh_fillter = cmh_deaths_filt,
+#'    col_pallet = "viridis",
+#'    addtiles = "Stamen.TonerLite",
+#'    border_col = "white",
+#'    bins = c(0,1,3,5,10,15,20,25,30,35,45,55),
+#'    legend_label ="range")
 #'   }
 #' @import magrittr
 #' @import tidyverse
@@ -391,16 +391,15 @@ dynamic_map <- function(df,
 #' @param addtiles A provider tile
 #' @param border_col Prefered border color
 #' @param legend_label Prefered label of the legend
-#' @return A basic map of tract or county or cmhsp or pihp
 #' @examples
 #' \dontrun{
 #' static_map(
-#'  df = dataframe,
-#' map_type = county,
-#' col_pallet = "viridis",
-#' addtiles = "Stamen.TonerLite",
-#' border_col = "white",
-#' legend_label = "range")
+#'    df = dataframe,
+#'    map_type = county,
+#'    col_pallet = "viridis",
+#'    addtiles = "Stamen.TonerLite",
+#'    border_col = "white",
+#'    legend_label = "range")
 #' }
 #' @import magrittr
 #' @import tidyverse

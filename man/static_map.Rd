@@ -26,9 +26,6 @@ static_map(
 
 \item{legend_label}{Prefered label of the legend}
 }
-\value{
-A basic map of tract or county or cmhsp or pihp
-}
 \description{
 df : The data frame must contain a name column (county or PIHP or CMHSP names) and summary column
 i.e... summarized number. \cr \cr
@@ -42,11 +39,11 @@ legend_label : Label of the legend. \cr \cr
 \examples{
 \dontrun{
 static_map(
- df = dataframe,
-map_type = county,
-col_pallet = "viridis",
-addtiles = "Stamen.TonerLite",
-border_col = "white",
-legend_label = "range")
+   df = dataframe,
+   map_type = county,
+   col_pallet = "viridis",
+   addtiles = "Stamen.TonerLite",
+   border_col = "white",
+   legend_label = "range")
 }
 }

@@ -53,14 +53,14 @@ legend_label : Label of the legend. \cr \cr
 \examples{
 \dontrun{
 dynamic_map(
-  df = select_df,
-  map_type = input$group,
-  pihp_filter = pihp_deaths_filt,
-  cmh_fillter = cmh_deaths_filt,
-  col_pallet = "viridis",
-  addtiles = "Stamen.TonerLite",
-  border_col = "white",
-  bins = c(0,1,3,5,10,15,20,25,30,35,45,55),
-  legend_label ="range")
+   df = select_df,
+   map_type = input$group,
+   pihp_filter = pihp_deaths_filt,
+   cmh_fillter = cmh_deaths_filt,
+   col_pallet = "viridis",
+   addtiles = "Stamen.TonerLite",
+   border_col = "white",
+   bins = c(0,1,3,5,10,15,20,25,30,35,45,55),
+   legend_label ="range")
   }
 }

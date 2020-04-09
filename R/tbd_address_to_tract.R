@@ -1,7 +1,8 @@
-#' Census Tract
+#' Address to Tract
 #'
 # \description{
-#' df : A dataframe
+#' The function allows a dataframe as input and returns geocoded information using
+#' census tract API. The dataframe may not exceed 10,000 records.
 # }
 #' @param df A dataframe
 #' @examples
@@ -15,9 +16,6 @@
 #' @import devtools
 #' @import RCurl
 #' @import urltools
-#' @import DBI
-#' @import odbc
-#' @import RODBC
 #' @import svDialogs
 #' @import utils
 #' @export
