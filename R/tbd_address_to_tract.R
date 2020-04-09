@@ -3,8 +3,13 @@
 # \description{
 #' df : A dataframe
 # }
-#' @example tbd_address_to_tract(df = dataframe)
 #' @param df A dataframe
+#' @examples
+#' \dontrun{
+#' tbd_address_to_tract(
+#'   df = Data frame
+#'   )
+#'   }
 #' @import httr
 #' @import tidyverse
 #' @import devtools
@@ -43,7 +48,7 @@ tbd_address_to_tract <- function(df){
   cat(content(list_output, "text", encoding = "UTF-8"), file="output.csv")
 
   #Converting the output to a data frame
-  df_output <<-
+  df_output <-
     read.csv(
       file ="output.csv", header = FALSE,
       col.names = c(
@@ -53,5 +58,5 @@ tbd_address_to_tract <- function(df){
         ,"tract_code","block_code"
       )
     )
-
+  geocoded_address_to_tract <<- df_output
 }

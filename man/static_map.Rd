@@ -40,6 +40,7 @@ border_col : Fill border color. \cr \cr
 legend_label : Label of the legend. \cr \cr
 }
 \examples{
+\dontrun{
 static_map(
  df = dataframe,
 map_type = county,
@@ -47,4 +48,5 @@ col_pallet = "viridis",
 addtiles = "Stamen.TonerLite",
 border_col = "white",
 legend_label = "range")
+}
 }
