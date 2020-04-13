@@ -52,7 +52,7 @@ legend_label : Label of the legend. \cr \cr
 }
 \examples{
 \dontrun{
-tbd_dynamic_map(
+tbd_dynamic_map_mi(
    df = select_df,
    map_type = input$group,
    pihp_filter = pihp_deaths_filt,

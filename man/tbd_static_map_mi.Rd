@@ -38,7 +38,7 @@ legend_label : Label of the legend. \cr \cr
 }
 \examples{
 \dontrun{
-tbd_static_map(
+tbd_static_map_mi(
    df = dataframe,
    map_type = county,
    col_pallet = "viridis",
