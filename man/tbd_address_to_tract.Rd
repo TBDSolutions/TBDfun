@@ -11,7 +11,13 @@ tbd_address_to_tract(df)
 }
 \description{
 The function allows a dataframe as input and returns geocoded information using
-census tract API. The dataframe may not exceed 10,000 records.
+census tract API. Put each field value in a seperate column i.e.. unique ID, House Number and Street Name,
+city , state, zipcode. City and State, or ZIP Code may be left blank
+The dataframe may not exceed 10,000 records.
+It may take several minutes to process this many addresses.
+The function creates the dataframe as a .csv file in a temp location and passes the .csv
+file to the census tract API. Please visit the following link for more details:
+https://geocoding.geo.census.gov/geocoder/locations/addressbatch?form
 }
 \examples{
 \dontrun{

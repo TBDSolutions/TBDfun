@@ -35,7 +35,7 @@
 #' @param legend_label Prefered label of the legend
 #' @examples
 #' \dontrun{
-#' dynamic_map(
+#' tbd_dynamic_map_mi(
 #'    df = select_df,
 #'    map_type = input$group,
 #'    pihp_filter = pihp_deaths_filt,
@@ -59,7 +59,7 @@
 #' @import htmltools
 #' @export
 
-dynamic_map <- function(df,
+tbd_dynamic_map_mi <- function(df,
                         map_type,
                         pihp_filter,
                         cmh_filter,

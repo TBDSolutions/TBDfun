@@ -24,7 +24,7 @@
 #' @param legend_label Prefered label of the legend
 #' @examples
 #' \dontrun{
-#' static_map(
+#' tbd_static_map_mi(
 #'    df = dataframe,
 #'    map_type = county,
 #'    col_pallet = "viridis",
@@ -44,7 +44,7 @@
 #' @import dplyr
 #' @import htmltools
 #' @export
-static_map <- function(df,
+tbd_static_map_mi <- function(df,
                        map_type,
                        col_pallet = "viridis",
                        addtiles = "Stamen.TonerLite",
