@@ -3,6 +3,10 @@ title: "Testing script"
 author: "prodigy_systems_and_services"
 date: "27/03/2020"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Testing script}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -11,7 +15,7 @@ library(tidyverse); library(dplyr); library(sf); library(leaflet)
 
 ```{r master_dataset}
 
-master <- st_read("../data/mi_master_polygons.shp")
+master <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 head(master)
 ```
 
