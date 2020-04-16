@@ -1,7 +1,7 @@
 Package: TBDfun
 Type: Package
-Title: creating leaflet map 
-Version: 0.2.0
+Title: TBD Functions
+Version: 0.3.0
 Author: prodigy
 Maintainer: The package maintainer <venkaiahp@prodigygroupindia.com> and <giridhark@prodigygroupindia.com>
 Description: This package consists of 2 functions, one function creates a static map which is basic map of county or
@@ -9,6 +9,10 @@ Description: This package consists of 2 functions, one function creates a static
     You create a Leaflet map with these basic steps:
     Create a map widget by calling leaflet().
     Add layers (i.e., features) to the map by using layer functions (e.g. addTiles, addMarkers, addPolygons) to modify the map widget.
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.0
+Imports: magrittr, tidyverse, viridis, maps, tigris, leaflet, tidycensus, stringr, sf, dplyr, htmltools, RCurl,devtools,httr,svDialogs,urltools, utils
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr

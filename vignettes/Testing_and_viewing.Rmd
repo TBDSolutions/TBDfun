@@ -3,6 +3,10 @@ title: "Testing script"
 author: "prodigy_systems_and_services"
 date: "27/03/2020"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Testing script}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -11,15 +15,14 @@ library(tidyverse); library(dplyr); library(sf); library(leaflet)
 
 ```{r master_dataset}
 
-master <- st_read("data/mi_master_polygons.shp")
+master <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 head(master)
 ```
 
 ```{r tract, warning=FALSE}
 tract <- master %>%
   group_by(NAME) %>%
-  summarize(
-    population = sum(estimate, na.rm = TRUE))
+  summarize(population = sum(estimate, na.rm = TRUE))
 
 tract_map <- leaflet(tract) %>% addPolygons() %>% addTiles()
 print(tract_map)
@@ -28,21 +31,24 @@ print(tract_map)
 ```{r county, warning=FALSE}
 county <- master %>%
   group_by(county) %>%
-  summarize(
-    population = sum(estimate, na.rm = TRUE))
+  summarize(population = sum(estimate, na.rm = TRUE))
 
 county_map <- leaflet(county) %>% addPolygons() %>% addTiles()
 print(county_map)
 ```
+
+
 ```{r cmhsp, warning=FALSE}
 cmhsp <- master %>%
   group_by(CMHSP) %>%
-  summarize(
-    population = sum(estimate, na.rm = TRUE))
+  summarize(population = sum(estimate, na.rm = TRUE))
 
 cmhsp_map <- leaflet(cmhsp) %>% addPolygons() %>% addTiles()
 print(cmhsp_map)
 ```
+
+
+
 ```{r pihp, warning=FALSE}
 pihp <- master %>%
   group_by(PIHP) %>%
