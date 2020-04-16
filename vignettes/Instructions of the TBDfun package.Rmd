@@ -1,6 +1,5 @@
 ---
 title: "Instructions of the TBDfun package"
-author: "Prodigy"
 date: "26/03/2020"
 output: html_document
 ---
