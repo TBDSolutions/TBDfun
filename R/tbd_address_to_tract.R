@@ -29,6 +29,7 @@
 tbd_address_to_tract <- function(df){
 
   Census_Tract <- df
+  Census_Tract[is.na(Census_Tract)] <- " "
   names(Census_Tract) <- NULL
 
   #store the data in a temp .csv file
@@ -51,6 +52,7 @@ tbd_address_to_tract <- function(df){
   #Storing the Encoded data in a file
   cat(content(list_output, "text", encoding = "UTF-8"), file="output.csv")
 
+  #Converting the output to a data frame
   #Converting the output to a data frame
   df_output <-
     read.csv(
