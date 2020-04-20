@@ -111,37 +111,6 @@ tbd_dynamic_map_mi <- function(df,
 
                       cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
 
-                      county_reference<-mi_master_polygons[,c(1,4,6)]
-                      county_reference$GEOID<-substr(county_reference$GEOID, 1, 5)
-                      county_reference<-county_reference %>%
-                        group_by(GEOID,county)%>%
-                        summarize(
-                          population = sum(estimate, na.rm = TRUE))
-                      county_reference$geometry<-NULL
-                      county_reference$population<-NULL
-                      tract_reference<-mi_master_polygons[,c(1,2)]
-                      tract_reference$geometry<-NULL
-
-                      if(names(df) == "countyid"){
-                        df<-df %>%
-                          inner_join(county_reference, by = c("countyid" = "GEOID"))%>%
-                          rename(name = county)
-                      }
-
-                      if(names(df) == "tractid"){
-                        df<-df %>%
-                          inner_join(tract_reference, by = c("tractid" = "GEOID"))%>%
-                          rename(name = county)
-                      }
-
-                      if(grepl("county", map_type, ignore.case = T)){
-
-                        df <- county_reference %>%
-                          left_join(df, by = c("county" = "name")) %>%
-                          rename(name = county)
-                        df$summary <- as.numeric(df$summary)
-                      }
-
                       county_label <- sprintf(
                         "<strong>%g </strong><br/><strong>%s county</strong><br/>",
                         df$summary,df$name) %>%
