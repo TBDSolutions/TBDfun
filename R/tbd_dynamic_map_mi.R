@@ -81,7 +81,7 @@ tbd_dynamic_map_mi <- function(df,
                     if(requireNamespace("dplyr"))
                       if(requireNamespace("htmltools"))
 
-                        mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
+                        #mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 
                       ###county shape file ##
                       county <- mi_master_polygons %>%
