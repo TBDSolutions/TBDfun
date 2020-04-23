@@ -16,7 +16,10 @@ mi_polygons <- get_acs(geography = "tract",
 mi_polygons$county<-str_extract(mi_polygons$NAME, "(?<=,)[^,]*(?=,)")
 mi_polygons$county<-gsub(" County","",mi_polygons$county)
 mi_polygons$county<-trimws(mi_polygons$county)
-
+mi_polygons$NAME<-gsub("St. Clair","Saint Clair",mi_polygons$NAME)
+mi_polygons$NAME<-gsub("St. Joseph","Saint Joseph",mi_polygons$NAME)
+mi_polygons$county<-gsub("St. Clair","Saint Clair",mi_polygons$county)
+mi_polygons$county<-gsub("St. Joseph","Saint Joseph",mi_polygons$county)
 #######
 mi_polygons$PIHP<-NA
 mi_polygons[mi_polygons$county %in% c("Lenawee","Livingston","Monroe","Washtenaw"),]$PIHP <- 'CMHPSM'
@@ -32,16 +35,16 @@ mi_polygons[mi_polygons$county %in% c("Alcona","Alpena", "Antrim","Benzie", "Cha
                                       "Oscoda","Otsego","Presque Isle","Roscommon","Wexford"),]$PIHP <- 'NMRE'
 mi_polygons[mi_polygons$county %in% c("Alger","Baraga","Chippewa","Delta", "Dickinson","Gogebic","Houghton","Iron",
                                       "Keweenaw","Luce","Mackinac","Marquette","Menominee","Ontonagon","Schoolcraft"),]$PIHP <- 'Northcare'
-mi_polygons[mi_polygons$county %in% c("Genesee","Lapeer","Sanilac","St. Clair"),]$PIHP <- 'Region10'
-mi_polygons[mi_polygons$county %in% c("Barry","Berrien","Branch","Calhoun","Cass","Kalamazoo","Van Buren","St. Joseph"),]$PIHP <- 'SWMBH'
+mi_polygons[mi_polygons$county %in% c("Genesee","Lapeer","Sanilac","Saint Clair"),]$PIHP <- 'Region10'
+mi_polygons[mi_polygons$county %in% c("Barry","Berrien","Branch","Calhoun","Cass","Kalamazoo","Van Buren","Saint Joseph"),]$PIHP <- 'SWMBH'
 
 mi_polygons$CMHSP<-NA
 mi_polygons[mi_polygons$county %in% c("Allegan"),]$CMHSP <- 'Allegan'
 mi_polygons[mi_polygons$county %in% c("Iosco","Ogemaw","Oscoda"),]$CMHSP <- 'AuSable Valley'
 mi_polygons[mi_polygons$county %in% c("Barry"),]$CMHSP <- 'Barry'
 mi_polygons[mi_polygons$county %in% c("Oakland"),]$CMHSP <- 'Oakland'
-mi_polygons[mi_polygons$county %in% c("St. Clair"),]$CMHSP <- 'Saint Clair'
-mi_polygons[mi_polygons$county %in% c("St. Joseph"),]$CMHSP <- 'Saint Joseph'
+mi_polygons[mi_polygons$county %in% c("Saint Clair"),]$CMHSP <- 'Saint Clair'
+mi_polygons[mi_polygons$county %in% c("Saint Joseph"),]$CMHSP <- 'Saint Joseph'
 mi_polygons[mi_polygons$county %in% c("Arenac","Bay"),]$CMHSP <- 'Bay-Arenac'
 mi_polygons[mi_polygons$county %in% c("Berrien"),]$CMHSP <- 'Berrien'
 mi_polygons[mi_polygons$county %in% c("Clinton","Eaton","Ingham"),]$CMHSP <- 'CEI'

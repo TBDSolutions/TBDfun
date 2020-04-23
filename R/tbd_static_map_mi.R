@@ -62,32 +62,38 @@ tbd_static_map_mi <- function(df,
                   if(requireNamespace("sf"))
                     if(requireNamespace("dplyr"))
                       if(requireNamespace("htmltools"))
+                        if(requireNamespace("rmapshaper"))
 
     mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
+    mi_master_polygons <- ms_simplify(mi_master_polygons)
 
-  ###county shape file ##
+    ###county shape file ##
   county <- mi_master_polygons %>%
     group_by(county) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
+  county <- ms_simplify(county)
 
   ###pihp shape file ##
   pihp <- mi_master_polygons %>%
     group_by(PIHP) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
+  pihp <- ms_simplify(pihp)
 
   ###cmhsp shape file ##
   cmhsp <- mi_master_polygons %>%
     group_by(CMHSP) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
+  cmhsp <- ms_simplify(cmhsp)
 
   ###tract shape file ##
   tract <- mi_master_polygons %>%
     group_by(NAME) %>%
     summarize(
       population = sum(estimate, na.rm = TRUE))
+  tract <- ms_simplify(tract)
 
   county_reference<-mi_master_polygons[,c(1,4,6)]
   county_reference$GEOID<-substr(county_reference$GEOID, 1, 5)
