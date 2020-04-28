@@ -2,13 +2,15 @@
 #'
 # \description{
 #' Provides access to the US Census Bureau batch endpoints for locations and geographies.
-#' The function implements iteration and optional parallelization in order to geocode datasets larger than the API limit of 10,000 and more efficiently than sending 10,000 per request.
-#' The function allows a dataframe as input and returns geocoded information using
-#' census tract API. Put each field value in a separate column i.e.. unique ID, House Number and Street Name,
-#' city , state, zipcode. City and State, or ZIP Code may be left blank
-#' The dataframe may not exceed 10,000 records.
-#' It may take several minutes to process this many addresses.
-#' The function creates the dataframe as a .csv file in a temp location and passes the .csv
+#' The function has been developed specifically with large data sets in mind. only unique
+#' addresses are passed to the API for geocoding. If a data set exceeds 1,000 unique
+#' addresses, it will be automatically subset into appropriately sized API calls,
+#' geocoded, and then put back together so that a single object is returned.
+#' The function implements iteration and optional parallelization in order to geocode datasets
+#' larger than the API limit of 10,000 and more efficiently than sending 10,000 per request.
+#' The function therefore provides an efficient solution to batch geocoding via the Census Bureau’s services.
+#' This implementation assumes that your data are contained in a data.frame or tibble, and that address
+#' data are split into a number of component variables: street address, city, state, and five digit zip code.
 #' file to the census tract API. Please visit the following link for more details:
 #'  \href{https://geocoding.geo.census.gov/geocoder/locations/addressbatch?form}{Census Tract Geocoding}
 # }
@@ -30,47 +32,45 @@
 #' @import svDialogs
 #' @import utils
 #' @import parallel
-#' @import rmapshaper
 #' @export
-# Interal Function for Geocoding with the Batch Endpoint
 
-tbd_batch_geocoder <- function(df, return, timeout){
+tbd_address_to_tract <- function(data, id = NULL, street, city = NULL, state = NULL, zip = NULL,timeout = 30, parallel = 1){
 
   if(requireNamespace("magrittr"))
     if(requireNamespace("tidyverse"))
-      if(requireNamespace("viridis"))
-        if(requireNamespace("maps"))
-          if(requireNamespace("tigris"))
-            if(requireNamespace("leaflet"))
-              if(requireNamespace("tidycensus"))
-                if(requireNamespace("stringr"))
-                  if(requireNamespace("sf"))
-                    if(requireNamespace("dplyr"))
-                      if(requireNamespace("htmltools"))
-                        if(requireNamespace("rmapshaper"))
-                          if(requireNamespace("parallel"))
+      if(requireNamespace("tidycensus"))
+        if(requireNamespace("stringr"))
+          if(requireNamespace("sf"))
+            if(requireNamespace("dplyr"))
+              if(requireNamespace("htmltools"))
+                if(requireNamespace("parallel"))
+
+  # Interal Function for Geocoding with the Batch Endpoint
+
+  tbd_batch_geocoder <- function(df, return, timeout){
+
   # Write a Temporary CSV
   tmp <- tempfile(fileext = '.csv')
   utils::write.table(df, tmp, col.names = FALSE, row.names = FALSE,
                      na = '', sep = ',')
+
   url <- "https://geocoding.geo.census.gov/geocoder/geographies/addressbatch"
+
   req <-
     POST(
       url,
       body = list(
         addressFile = upload_file(tmp),
         benchmark = "Public_AR_Current", vintage = "Current_Current"
-      ),
+        ),
       encode="multipart"
-    )
+      )
   cnt <- httr::content(req, as = 'text', encoding = 'UTF-8')
 
-  # Error if Benchmark/Vintage Invalid
-  # Not Perfect, Error is Returned as HTML, could be other errors... (BAD API DESIGN!)
-  # Could Cause Large Batches to FAIL if API Fails Unexpectedly
   if(grepl('<p>', cnt)){
     stop('API Failed Unexpectedly, Did you supply an Invalid Benchmark or Vintage?')
-  }
+    }
+
   df <-
     read.csv(
       file ="output.csv", header = FALSE,
@@ -79,28 +79,10 @@ tbd_batch_geocoder <- function(df, return, timeout){
         ,"tiger_match_type","tiger_output_address","longitude_latitude"
         ,"tigerline_id","tigerline_id_side","state_code","county_code"
         ,"tract_code","block_code"
-      ))
-
+        ))
   return(df)
-}
 
-#############
-
-tbd_address_to_tract <- function(data, id = NULL, street, city = NULL, state = NULL, zip = NULL,timeout = 30, parallel = 1){
-
-  if(requireNamespace("magrittr"))
-    if(requireNamespace("tidyverse"))
-      if(requireNamespace("viridis"))
-        if(requireNamespace("maps"))
-          if(requireNamespace("tigris"))
-            if(requireNamespace("leaflet"))
-              if(requireNamespace("tidycensus"))
-                if(requireNamespace("stringr"))
-                  if(requireNamespace("sf"))
-                    if(requireNamespace("dplyr"))
-                      if(requireNamespace("htmltools"))
-                        if(requireNamespace("rmapshaper"))
-                          if(requireNamespace("parallel"))
+  }
 
   # Check Specification of Arguments
   if(missing(data) | missing(street)){
@@ -235,4 +217,3 @@ tbd_address_to_tract <- function(data, id = NULL, street, city = NULL, state = N
   geocoded_address_to_tract <<- all_join
 
 }
-

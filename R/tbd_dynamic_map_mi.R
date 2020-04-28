@@ -82,257 +82,273 @@ tbd_dynamic_map_mi <- function(df,
                       if(requireNamespace("htmltools"))
                         if(requireNamespace("rmapshaper"))
 
-                        #mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
+  col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
 
-                      ###county shape file ##
-                      county <- mi_master_polygons %>%
-                        group_by(county) %>%
-                        summarize(
-                          population = sum(estimate, na.rm = TRUE))
-                      county <- ms_simplify(county)
-                      ###pihp shape file ##
-                      pihp <- mi_master_polygons %>%
-                        group_by(PIHP) %>%
-                        summarize(
-                          population = sum(estimate, na.rm = TRUE))
-                      pihp <- ms_simplify(pihp)
-                      ###cmhsp shape file ##
-                      cmhsp <- mi_master_polygons %>%
-                        group_by(CMHSP) %>%
-                        summarize(
-                          population = sum(estimate, na.rm = TRUE))
-                      cmhsp <- ms_simplify(cmhsp)
-                      ###tract shape file ##
-                      tract <- mi_master_polygons %>%
-                        group_by(NAME) %>%
-                        summarize(
-                          population = sum(estimate, na.rm = TRUE))
-                      tract <- ms_simplify(tract)
-                      pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
+      map <- if(grepl("County", map_type, ignore.case = T)){
 
-                      cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
+          ###county shape file ##
+             county <- mi_master_polygons %>%
+               group_by(county) %>%
+               summarize(
+                 population = sum(estimate, na.rm = TRUE))
+                 county <- ms_simplify(county)
 
-                      county_label <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s county</strong><br/>",
-                        df$summary,df$name) %>%
-                        lapply(htmltools::HTML)
+             county_label <- sprintf(
+               "<strong>%g </strong><br/><strong>%s county</strong><br/>",
+               df$summary,df$name) %>%
+               lapply(htmltools::HTML)
+             map <- leaflet(county) %>%
+               addTiles() %>%
+               addProviderTiles(addtiles) %>%
+               addPolygons(
+                 fillColor = ~col_dist(df$summary),
+                 weight = 2,
+                 opacity = 0.6,
+                 color = border_col,
+                 dashArray = "3",
+                 fillOpacity = 0.75,
+                 highlight = highlightOptions(
+                   weight = 5,
+                   color = "#FF5500",
+                   dashArray = "0.3",
+                   fillOpacity = 0.7,
+                   bringToFront = TRUE),
+                 label = county_label,
+                 labelOptions = labelOptions(
+                   style = list("font-weight" = "normal", padding = "3px 8px"),
+                   textsize = "15px",
+                   direction = "auto")) %>%
+               leaflet::addLegend(pal = col_dist,
+                                  values = ~df$summary,
+                                  opacity = 0.7,
+                                  title = legend_label,
+                                  position = "bottomright",
+                                  na.label = "NA")
 
-                      pihp_label <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
-                        df$summary,df$name) %>%
-                        lapply(htmltools::HTML)
+      print(map)
 
-                      cmhsp_label <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
-                        df$summary,df$name) %>%
-                        lapply(htmltools::HTML)
+      }
 
-                      tract_label <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s tract</strong><br/>",
-                        df$summary,df$name) %>%
-                        lapply(htmltools::HTML)
+      else if(grepl("PIHP", map_type, ignore.case = T)){
 
-                      pihp_label_filt <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
-                        pihp_filter$summary,pihp_filter$name) %>%
-                        lapply(htmltools::HTML)
+          ###pihp shape file ##
+              pihp <- mi_master_polygons %>%
+                group_by(PIHP) %>%
+                summarize(
+                  population = sum(estimate, na.rm = TRUE))
+              pihp <- ms_simplify(pihp)
 
-                      cmh_label_filt <- sprintf(
-                        "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
-                        cmh_filter$summary,cmh_filter$name) %>%
-                        lapply(htmltools::HTML)
+          ###cmhsp shape file ##
+              cmhsp <- mi_master_polygons %>%
+                group_by(CMHSP) %>%
+                summarize(
+                  population = sum(estimate, na.rm = TRUE))
+                  cmhsp <- ms_simplify(cmhsp)
 
+          pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
 
-                      col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
+          cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
 
-                      map <- if(grepl("County", map_type, ignore.case = T)){
+          pihp_label <- sprintf(
+            "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
+            df$summary,df$name) %>%
+            lapply(htmltools::HTML)
 
-                        map <- leaflet(county) %>%
-                          addTiles() %>%
-                          addProviderTiles(addtiles) %>%
-                          addPolygons(
-                            fillColor = ~col_dist(df$summary),
-                            weight = 2,
-                            opacity = 0.6,
-                            color = border_col,
-                            dashArray = "3",
-                            fillOpacity = 0.75,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "0.3",
-                              fillOpacity = 0.7,
-                              bringToFront = TRUE),
-                            label = county_label,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          leaflet::addLegend(pal = col_dist,
-                                             values = ~df$summary,
-                                             opacity = 0.7,
-                                             title = legend_label,
-                                             position = "bottomright",
-                                             na.label = "NA")
+          pihp_label_filt <- sprintf(
+            "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
+            pihp_filter$summary,pihp_filter$name) %>%
+            lapply(htmltools::HTML)
 
-                        print(map)
+          cmh_label_filt <- sprintf(
+            "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
+            cmh_filter$summary,cmh_filter$name) %>%
+            lapply(htmltools::HTML)
 
-                      }
+          map <- leaflet(pihp) %>%
+            addTiles() %>%
+            addProviderTiles(addtiles) %>%
+            addPolygons(
+              fillColor = ~col_dist(df$summary),
+              weight = 2,
+              opacity = 0.6,
+              color = border_col,
+              dashArray = "3",
+              fillOpacity = 0.75,
+              highlight = highlightOptions(
+                weight = 5,
+                color = "#FF5500",
+                dashArray = "0.3",
+                fillOpacity = 0.7,
+                bringToFront = F),
+              label = pihp_label,
+              labelOptions = labelOptions(
+                style = list("font-weight" = "normal", padding = "3px 8px"),
+                textsize = "15px",
+                direction = "auto")) %>%
+              addPolygons(
+                data = pihp_fil,
+                fillColor = ~col_dist(pihp_filter$summary),
+                weight = 2,
+                opacity = 1,
+                color = "red",
+                dashArray = "3",
+                fillOpacity = 0.7,
+                highlight = highlightOptions(
+                  weight = 5,
+                  color = "#FF5500",
+                  dashArray = "",
+                  fillOpacity = 0.7,
+                  bringToFront = F),
+                label = pihp_label_filt,
+                labelOptions = labelOptions(
+                  style = list("font-weight" = "normal", padding = "3px 8px"),
+                  textsize = "15px",
+                  direction = "auto")) %>%
+                addPolygons(
+                  data = cmh_fil,
+                  fillColor = ~col_dist(cmh_filter$summary),
+                  weight = 2,
+                  opacity = 0.5,
+                  color = "blue",
+                  dashArray = "3",
+                  fillOpacity = 0.7,
+                  highlight = highlightOptions(
+                    weight = 5,
+                    color = "#FF5500",
+                    dashArray = "",
+                    fillOpacity = 0.7,
+                    bringToFront = F),
+                  label = cmh_label_filt,
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto")) %>%
+            leaflet::addLegend(pal = col_dist,
+                               values = ~df$summary,
+                               opacity = 0.7,
+                               title = legend_label,
+                               position = "bottomright",
+                               na.label = "NA")
 
-                      else if(grepl("PIHP", map_type, ignore.case = T)){
+          print(map)
 
-                        map <- leaflet(pihp) %>%
-                          addTiles() %>%
-                          addProviderTiles(addtiles) %>%
-                          addPolygons(
-                            fillColor = ~col_dist(df$summary),
-                            weight = 2,
-                            opacity = 0.6,
-                            color = border_col,
-                            dashArray = "3",
-                            fillOpacity = 0.75,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "0.3",
-                              fillOpacity = 0.7,
-                              bringToFront = F),
-                            label = pihp_label,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          addPolygons(
-                            data = pihp_fil,
-                            fillColor = ~col_dist(pihp_filter$summary),
-                            weight = 2,
-                            opacity = 1,
-                            color = "red",
-                            dashArray = "3",
-                            fillOpacity = 0.7,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "",
-                              fillOpacity = 0.7,
-                              bringToFront = F),
-                            label = pihp_label_filt,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          addPolygons(
-                            data = cmh_fil,
-                            fillColor = ~col_dist(cmh_filter$summary),
-                            weight = 2,
-                            opacity = 0.5,
-                            color = "blue",
-                            dashArray = "3",
-                            fillOpacity = 0.7,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "",
-                              fillOpacity = 0.7,
-                              bringToFront = F),
-                            label = cmh_label_filt,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          leaflet::addLegend(pal = col_dist,
-                                             values = ~df$summary,
-                                             opacity = 0.7,
-                                             title = legend_label,
-                                             position = "bottomright",
-                                             na.label = "NA")
+          }
 
-                        print(map)
-                      }
-                      else if(grepl("CMHSP", map_type, ignore.case = T)){
+      else if(grepl("CMHSP", map_type, ignore.case = T)){
 
-                        map <- leaflet(cmhsp) %>%
-                          addTiles() %>%
-                          addProviderTiles(addtiles) %>%
-                          addPolygons(
-                            fillColor = ~col_dist(df$summary),
-                            weight = 2,
-                            opacity = 0.6,
-                            color = border_col,
-                            dashArray = "3",
-                            fillOpacity = 0.75,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "0.3",
-                              fillOpacity = 0.7,
-                              bringToFront = F),
-                            label = cmhsp_label,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          addPolygons(
-                            data=cmh_fil,
-                            fillColor = ~col_dist(cmh_filter$summary),
-                            weight = 2,
-                            opacity = 1,
-                            color = "red",
-                            dashArray = "3",
-                            fillOpacity = 0.7,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "",
-                              fillOpacity = 0.7,
-                              bringToFront = TRUE),
-                            label = cmh_label_filt,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal",
-                                           padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          leaflet::addLegend(pal = col_dist,
-                                             values = ~df$summary,
-                                             opacity = 0.7,
-                                             title = legend_label,
-                                             position = "bottomright",
-                                             na.label = "NA")
+        ###cmhsp shape file ##
+        cmhsp <- mi_master_polygons %>%
+          group_by(CMHSP) %>%
+          summarize(
+            population = sum(estimate, na.rm = TRUE))
 
-                        print(map)
-                      }
-                      else if(grepl("tract", map_type, ignore.case = T)){
+        cmh_fil <- cmhsp %>% filter(CMHSP == cmh_filter$name)
 
-                        map <- leaflet(tract) %>%
-                          addTiles() %>%
-                          addProviderTiles(addtiles) %>%
-                          addPolygons(
-                            fillColor = ~col_dist(df$summary),
-                            weight = 2,
-                            opacity = 0.6,
-                            color = border_col,
-                            dashArray = "3",
-                            fillOpacity = 0.75,
-                            highlight = highlightOptions(
-                              weight = 5,
-                              color = "#FF5500",
-                              dashArray = "0.3",
-                              fillOpacity = 0.7,
-                              bringToFront = F),
-                            label = tract_label,
-                            labelOptions = labelOptions(
-                              style = list("font-weight" = "normal", padding = "3px 8px"),
-                              textsize = "15px",
-                              direction = "auto")) %>%
-                          leaflet::addLegend(pal = col_dist,
-                                             values = ~df$summary,
-                                             opacity = 0.7,
-                                             title = legend_label,
-                                             position = "bottomright",
-                                             na.label = "NA")
+        cmhsp_label <- sprintf(
+          "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
+          df$summary,df$name) %>%
+          lapply(htmltools::HTML)
 
-                        print(map)
-                      }
+        cmh_label_filt <- sprintf(
+          "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
+          cmh_filter$summary,cmh_filter$name) %>%
+          lapply(htmltools::HTML)
 
-                      return(map)
-}
+        map <- leaflet(cmhsp) %>%
+          addTiles() %>%
+          addProviderTiles(addtiles) %>%
+          addPolygons(
+            fillColor = ~col_dist(df$summary),
+            weight = 2,
+            opacity = 0.6,
+            color = border_col,
+            dashArray = "3",
+            fillOpacity = 0.75,
+            highlight = highlightOptions(
+              weight = 5,
+              color = "#FF5500",
+              dashArray = "0.3",
+              fillOpacity = 0.7,
+              bringToFront = F),
+            label = cmhsp_label,
+            labelOptions = labelOptions(
+              style = list("font-weight" = "normal", padding = "3px 8px"),
+              textsize = "15px",
+              direction = "auto")) %>%
+          addPolygons(
+            data=cmh_fil,
+            fillColor = ~col_dist(cmh_filter$summary),
+            weight = 2,
+            opacity = 1,
+            color = "red",
+            dashArray = "3",
+            fillOpacity = 0.7,
+            highlight = highlightOptions(
+              weight = 5,
+              color = "#FF5500",
+              dashArray = "",
+              fillOpacity = 0.7,
+              bringToFront = TRUE),
+            label = cmh_label_filt,
+            labelOptions = labelOptions(
+              style = list("font-weight" = "normal", padding = "3px 8px"),
+              textsize = "15px",
+              direction = "auto")) %>%
+          leaflet::addLegend(pal = col_dist,
+                             values = ~df$summary,
+                             opacity = 0.7,
+                             title = legend_label,
+                             position = "bottomright",
+                             na.label = "NA")
+        print(map)
+
+        }
+
+      else if(grepl("tract", map_type, ignore.case = T)){
+
+        ###tract shape file ##
+        tract <- mi_master_polygons %>%
+          group_by(NAME) %>%
+          summarize(
+            population = sum(estimate, na.rm = TRUE))
+        tract <- ms_simplify(tract)
+
+        tract_label <- sprintf(
+          "<strong>%g </strong><br/><strong>%s tract</strong><br/>",
+          df$summary,df$name) %>%
+          lapply(htmltools::HTML)
+
+        map <- leaflet(tract) %>%
+          addTiles() %>%
+          addProviderTiles(addtiles) %>%
+          addPolygons(
+            fillColor = ~col_dist(df$summary),
+            weight = 2,
+            opacity = 0.6,
+            color = border_col,
+            dashArray = "3",
+            fillOpacity = 0.75,
+            highlight = highlightOptions(
+              weight = 5,
+              color = "#FF5500",
+              dashArray = "0.3",
+              fillOpacity = 0.7,
+              bringToFront = F),
+            label = tract_label,
+            labelOptions = labelOptions(
+              style = list("font-weight" = "normal", padding = "3px 8px"),
+              textsize = "15px",
+              direction = "auto")) %>%
+          leaflet::addLegend(pal = col_dist,
+                             values = ~df$summary,
+                             opacity = 0.7,
+                             title = legend_label,
+                             position = "bottomright",
+                             na.label = "NA")
+        print(map)
+
+        }
+
+      return(map)
+
+      }
