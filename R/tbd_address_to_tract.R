@@ -14,7 +14,7 @@
 #' file to the census tract API. Please visit the following link for more details:
 #'  \href{https://geocoding.geo.census.gov/geocoder/locations/addressbatch?form}{Census Tract Geocoding}
 # }
-#' @param .data A dataframe
+#' @param data A dataframe
 #' @param id Unique ID
 #' @param street A column that consist of house number and street address
 #' @param city City column
@@ -39,15 +39,15 @@
 #' @import parallel
 #' @export
 
-tbd_address_to_tract <- function(.data, id = NULL, street, city = NULL, state = NULL, zip = NULL){
+tbd_address_to_tract <- function(data, id = NULL, street, city = NULL, state = NULL, zip = NULL){
 
   parallel = 1
 
   # Check Specification of Arguments
-  if(missing(.data) | missing(street)){
-    stop('`.data` and `street` are required arguments')
+  if(missing(data) | missing(street)){
+    stop('`data` and `street` are required arguments')
   }
-  if(!is.null(id) && any(duplicated(.data[[id]]))){
+  if(!is.null(id) && any(duplicated(data[[id]]))){
     stop('Rows in the `id` column are not unique')
   }
 
@@ -69,46 +69,46 @@ tbd_address_to_tract <- function(.data, id = NULL, street, city = NULL, state = 
   }
 
   # Handle NA Arguments
-  n <- nrow(.data)
+  n <- nrow(data)
 
   if(!is.null(id)){
-    if(!id %in% names(.data)){
+    if(!id %in% names(data)){
       stop(id, ' is not a defined column name in the data.frame')
     }
     # Need to Sort User Data for Later Column Binding
-    .data <- .data[order(.data[[id]]),]
-    id <- .data[[id]]
+    data <- data[order(data[[id]]),]
+    id <- data[[id]]
   }else{
     id <- seq(n)
   }
 
-  if(!street %in% names(.data)){
+  if(!street %in% names(data)){
     stop(street, ' is not a defined column name in the data.frame')
   }
 
   if(!is.null(city)){
-    if(!city %in% names(.data)){
+    if(!city %in% names(data)){
       stop(city, ' is not a defined column name in the data.frame')
     }
-    city <- .data[[city]]
+    city <- data[[city]]
   }else{
     city <- rep_len(NA, n)
   }
 
   if(!is.null(state)){
-    if(!state %in% names(.data)){
+    if(!state %in% names(data)){
       stop(state, ' is not a defined column name in the data.frame')
     }
-    state <- .data[[state]]
+    state <- data[[state]]
   }else{
     state <- rep_len(NA, n)
   }
 
   if(!is.null(zip)){
-    if(!zip %in% names(.data)){
+    if(!zip %in% names(data)){
       stop(zip, ' is not a defined column name in the data.frame')
     }
-    zip <- .data[[zip]]
+    zip <- data[[zip]]
   }else{
     zip <- rep_len(NA, n)
   }
@@ -116,7 +116,7 @@ tbd_address_to_tract <- function(.data, id = NULL, street, city = NULL, state = 
   # Build a Data.frame
   df <- data.frame(
     id = id,
-    street = .data[[street]],
+    street = data[[street]],
     city = city,
     state = state,
     zip = zip,
