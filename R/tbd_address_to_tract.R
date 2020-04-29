@@ -3,7 +3,7 @@
 # \description{
 #' Provides access to the US Census Bureau batch endpoints for locations and geographies.
 #' The function has been developed specifically with large data sets in mind. only unique
-#' addresses are passed to the API for geocoding. If a data set exceeds 1,000 unique
+#' addresses are passed to the API for geocoding. If a data set exceeds 10,000 unique
 #' addresses, it will be automatically subset into appropriately sized API calls,
 #' geocoded, and then put back together so that a single object is returned.
 #' The function implements iteration and optional parallelization in order to geocode datasets
