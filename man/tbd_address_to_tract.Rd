@@ -4,25 +4,51 @@
 \alias{tbd_address_to_tract}
 \title{Address to Tract}
 \usage{
-tbd_address_to_tract(df)
+tbd_address_to_tract(
+  .data,
+  id = NULL,
+  street,
+  city = NULL,
+  state = NULL,
+  zip = NULL,
+  parallel = 1
+)
 }
 \arguments{
-\item{df}{A dataframe}
+\item{.data}{A dataframe}
+
+\item{id}{Unique ID}
+
+\item{street}{A column that consist of house number and street address}
+
+\item{city}{City column}
+
+\item{state}{State column}
+
+\item{zip}{Zip column}
 }
 \description{
-The function allows a dataframe as input and returns geocoded information using
-census tract API. Put each field value in a separate column i.e.. unique ID, House Number and Street Name,
-city , state, zipcode. City and State, or ZIP Code may be left blank
-The dataframe may not exceed 10,000 records.
-It may take several minutes to process this many addresses.
-The function creates the dataframe as a .csv file in a temp location and passes the .csv
+Provides access to the US Census Bureau batch endpoints for locations and geographies.
+The function has been developed specifically with large data sets in mind. only unique
+addresses are passed to the API for geocoding. If a data set exceeds 1,000 unique
+addresses, it will be automatically subset into appropriately sized API calls,
+geocoded, and then put back together so that a single object is returned.
+The function implements iteration and optional parallelization in order to geocode datasets
+larger than the API limit of 10,000 and more efficiently than sending 10,000 per request.
+The function therefore provides an efficient solution to batch geocoding via the Census Bureau’s services.
+This implementation assumes that your data are contained in a data.frame or tibble, and that address
+data are split into a number of component variables: street address, city, state, and five digit zip code.
 file to the census tract API. Please visit the following link for more details:
  \href{https://geocoding.geo.census.gov/geocoder/locations/addressbatch?form}{Census Tract Geocoding}
 }
 \examples{
 \dontrun{
-tbd_address_to_tract(
-  df = Data frame
-  )
+tbd_address_to_tract(data = data frame,
+                     id = id,
+                     street = street,
+                     city = city,
+                     state = state,
+                     zip = zip_code,
+                     parallel = 1)
   }
 }

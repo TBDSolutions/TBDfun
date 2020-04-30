@@ -13,6 +13,6 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
-Imports: magrittr, tidyverse, viridis, maps, tigris, leaflet, tidycensus, stringr, sf, dplyr, htmltools, RCurl,devtools,httr,svDialogs,urltools, utils
+Imports: magrittr, tidyverse, viridis, maps, rmapshaper, parallel, tigris, leaflet, tidycensus, stringr, sf, dplyr, htmltools, RCurl,devtools,httr,svDialogs,urltools, utils
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

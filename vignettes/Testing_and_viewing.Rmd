@@ -58,3 +58,15 @@ pihp <- master %>%
 pihp_map <- leaflet(pihp) %>% addPolygons() %>% addTiles()
 print(pihp_map)
 ```
+
+
+
+```{r agency, warning=FALSE}
+agency <- master %>%
+  group_by(agency) %>%
+  summarize(
+    population = sum(estimate, na.rm = TRUE))
+
+agency_map <- leaflet(agency) %>% addPolygons() %>% addTiles()
+print(agency_map)
+```
