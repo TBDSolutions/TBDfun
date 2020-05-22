@@ -80,7 +80,7 @@ tbd_dynamic_map_mi <- function(df,
                   if(requireNamespace("sf"))
                     if(requireNamespace("dplyr"))
                       if(requireNamespace("htmltools"))
-                        if(requireNamespace("rmapshaper"))
+
 
   col_dist <- colorBin(c("viridis"),bins = bins,reverse = T, na.color = "grey")
 
@@ -91,7 +91,7 @@ tbd_dynamic_map_mi <- function(df,
                group_by(county) %>%
                summarize(
                  population = sum(estimate, na.rm = TRUE))
-                 county <- ms_simplify(county)
+                 #county <- ms_simplify(county)
 
              county_label <- sprintf(
                "<strong>%g </strong><br/><strong>%s county</strong><br/>",
@@ -136,14 +136,14 @@ tbd_dynamic_map_mi <- function(df,
                 group_by(PIHP) %>%
                 summarize(
                   population = sum(estimate, na.rm = TRUE))
-              pihp <- ms_simplify(pihp)
+              #pihp <- ms_simplify(pihp)
 
           ###cmhsp shape file ##
               cmhsp <- mi_master_polygons %>%
                 group_by(CMHSP) %>%
                 summarize(
                   population = sum(estimate, na.rm = TRUE))
-                  cmhsp <- ms_simplify(cmhsp)
+                  #cmhsp <- ms_simplify(cmhsp)
 
           pihp_fil <- pihp %>% filter(PIHP == pihp_filter$name)
 
@@ -311,7 +311,7 @@ tbd_dynamic_map_mi <- function(df,
           group_by(NAME) %>%
           summarize(
             population = sum(estimate, na.rm = TRUE))
-        tract <- ms_simplify(tract)
+        #tract <- ms_simplify(tract)
 
         tract_label <- sprintf(
           "<strong>%g </strong><br/><strong>%s tract</strong><br/>",

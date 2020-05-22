@@ -62,7 +62,7 @@ tbd_static_map_mi <- function(df,
                   if(requireNamespace("sf"))
                     if(requireNamespace("dplyr"))
                       if(requireNamespace("htmltools"))
-                        if(requireNamespace("rmapshaper"))
+
 
     mi_master_polygons <- st_read(system.file("extdata","mi_master_polygons.shp", package = "TBDfun"))
 
@@ -95,7 +95,7 @@ tbd_static_map_mi <- function(df,
       group_by(county) %>%
       summarize(
         population = sum(estimate, na.rm = TRUE))
-    county <- ms_simplify(county)
+    #county <- ms_simplify(county)
 
     county_label <- sprintf(
       "<strong>%g </strong><br/><strong>%s county</strong><br/>",
@@ -141,7 +141,7 @@ tbd_static_map_mi <- function(df,
       group_by(PIHP) %>%
       summarize(
         population = sum(estimate, na.rm = TRUE))
-    pihp <- ms_simplify(pihp)
+    #pihp <- ms_simplify(pihp)
 
     pihp_label <- sprintf(
       "<strong>%g </strong><br/><strong>%s PIHP</strong><br/>",
@@ -185,7 +185,7 @@ tbd_static_map_mi <- function(df,
       group_by(CMHSP) %>%
       summarize(
         population = sum(estimate, na.rm = TRUE))
-    cmhsp <- ms_simplify(cmhsp)
+    #cmhsp <- ms_simplify(cmhsp)
 
     cmhsp_label <- sprintf(
       "<strong>%g </strong><br/><strong>%s CMHSP</strong><br/>",
@@ -281,7 +281,7 @@ tbd_static_map_mi <- function(df,
       group_by(agency) %>%
       summarize(
         population = sum(estimate, na.rm = TRUE))
-    agency <- ms_simplify(agency)
+    #agency <- ms_simplify(agency)
 
     agency_label <- sprintf(
       "<strong>%g </strong><br/><strong>%s agency</strong><br/>",
