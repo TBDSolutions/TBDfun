@@ -32,7 +32,7 @@ regression_impute = function(x,n,id_var){
   # of missing values. It will serve as the lowest common denominator.
   lcd =
     x %>%
-    select(v,pred_vars[n]) %>%
+    select(id_var,pred_vars[n]) %>%
     na.omit() %>%
     select(id_var) %>% pull()
 
