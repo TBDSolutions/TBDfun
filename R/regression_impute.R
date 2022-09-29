@@ -3,7 +3,7 @@
 # with the most amount of non-missing data (specified with the n argument)
 # to predict the other columns that have missing values. If n is specified as
 # one, then only linear regression will be used using that column with the most
-# observations, otherwise muliple linear regression will be used.
+# observations, otherwise multiple linear regression will be used.
 
 
 regression_impute = function(x,n,id_var){
@@ -44,7 +44,7 @@ regression_impute = function(x,n,id_var){
     distinct()
 
   # Generate the list of feature names which need to be imputed.
-  # By deffinition, these features must not be part of the predictor
+  # By definition, these features must not be part of the predictor
   # variables that will be used to predict the missing values.
   feature_names = colnames(x[which(!names(x) %in% c(id_var,pred_vars))])
 
