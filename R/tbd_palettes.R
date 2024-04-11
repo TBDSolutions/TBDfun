@@ -1,11 +1,11 @@
 
 # categorical variables
-pal_9 <- c("#000000","#E69F00","#56B4E9","#009E73",
+pal_7PlusBlackGray <- c("#000000","#E69F00","#56B4E9","#009E73",
            "#F0E442","#0072B2","#D55E00","#CC79A7",
            "#999999" )
 
 # large categorical variables (only if really necessary)
-pal_12 <- c("#88CCEE", "#CC6677", "#DDCC77", "#117733", "#332288", "#AA4499",
+pal_11PlusGray <- c("#88CCEE", "#CC6677", "#DDCC77", "#117733", "#332288", "#AA4499",
             "#44AA99", "#999933", "#882255", "#661100", "#6699CC", "#888888")
 
 # continuous variables
