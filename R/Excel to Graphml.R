@@ -12,7 +12,11 @@ library(igraph);library(ggraph);
 #---------------------- Import and Reformat Excel ----------------------
 
 import <- function(file_path, format = 'Standard') {
-  if(format == 'Format 7') {
+  if(!dir.exists(dirname(file_path))) {
+    print("The file path does not exist.")
+    break
+  }
+  else if(format == 'Format 7') {
     ex_in <- read_excel(file_path, sheet = 'Sheet1') 
     
     edge_list <- read_excel(file_path, sheet = 'Sheet2') %>%
