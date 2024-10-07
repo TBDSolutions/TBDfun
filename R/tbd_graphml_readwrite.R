@@ -69,15 +69,15 @@ set_graph_style()
         
         fill = x_graph %>%
           xml_find_all(xpath = './/node[not(@yfiles.foldertype="group")]//y:Fill//@color') %>%
-          xml_values_to_character(),
-        
-        parent_id = x_graph %>%
-          xml_find_all(xpath = '..//node[not(@yfiles.foldertype="group")]//@id') %>%
-          xml_values_to_character(),
-        
-        parent_labels = x_graph %>%
-          xml_find_all(xpath = '..//node[not(@yfiles.foldertype="group")]//data[@key="d6"]//text()') %>%
           xml_values_to_character()
+        
+        # parent_id = x_graph %>%
+        #   xml_find_all(xpath = '..//node[not(@yfiles.foldertype="group")]//@id') %>%
+        #   xml_values_to_character(),
+        # 
+        # parent_labels = x_graph %>%
+        #   xml_find_all(xpath = '..//node[not(@yfiles.foldertype="group")]//data[@key="d6"]//text()') %>%
+        #   xml_values_to_character()
         
       )
       

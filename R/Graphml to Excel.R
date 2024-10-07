@@ -14,10 +14,10 @@ library(igraph); library(writexl); library(tidyverse); library(purrr);
 
 # Function that you'll use is in the TBDFun repo. 
 # https://github.com/TBDSolutions/TBDfun/blob/master/R/tbd_graphml_readwrite.R
-#source("C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\GitHub\\TBDfun\\R\\tbd_graphml_readwrite.R")
+source("C:\\Users\\samanthak\\Documents\\GitHub\\TBDfun\\R\\tbd_graphml_readwrite.R")
 
 # Save the file path of the graphml file to be analyzed
-path = "C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\CFA&P_Roles.v4.graphml"
+path = "C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\CFA&P_Roles.v5.graphml"
 
 # Read in the Graphml file (attributes such as color and text cannot be blank)
 graph <- read_graphml(path)
@@ -122,9 +122,12 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
     # Function nodes
     functions <- node_list %>%
       filter(fill == '#339966') # Filter nodes by color
+    # How nodes
+    hows <- node_list %>%
+      filter(fill == '#FF9900') # Filter nodes by color
     # Relevant edges
     edges <- edge_list %>%
-      filter(to %in% functions$id & from %in% entities$id)
+      filter((to %in% functions$id & from %in% entities$id) | (to %in% hows$id))
     
     container_id <- character()
     container_label <- character()
@@ -132,8 +135,11 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
     function_label <- character()
     entity_id <- character()
     entity_label <- character()
+    hows_id <- character()
+    hows_label <- character()
     
     for(f in 1:nrow(functions)) {
+      # Map functions to their entities based on the linking edges
       for(e in 1:nrow(entities)) {
         for(ed in 1:nrow(edges)) {
           if(edges$to[ed] == functions$id[f] & edges$from[ed] == entities$id[e]) {
@@ -148,23 +154,46 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
             entity_id[f] <- NA
             entity_label[f] <- NA
             break
-          }
+          } 
         }
       }
+      # Map functions to their containers based on ID
       for(c in 1:nrow(container_list)) {
         if(length(str_subset(functions$id[f], container_list$id[c])) > 0) {
           container_id[f] <- container_list$id[c]
           container_label[f] <- container_list$labels[c]
+          # Map containers to their hows
+          for(h in 1:nrow(hows)) {
+            for(ed in 1:nrow(edges)) {
+              if(edges$from[ed] == container_list$id[c] & edges$to[ed] == hows$id[h] & 
+                 length(str_subset(hows_id[f], paste(hows$id[h], ';'))) < 1) {
+                hows_id[f] <- if(is.na(hows_id[f])) {paste(hows$id[h], ';')} else{paste(hows_id[f], hows$id[h], ';')}
+                hows_label[f] <- if(is.na(hows_label[f])) {paste(hows$labels[h], ';')} else{paste(hows_label[f], hows$labels[h], ';')}
+                break
+              }
+            }
+          }
           break
         } else if(c == nrow(container_list)){
           container_id[f] <- NA
           container_label[f] <- NA
         }
       }
+      # Map functions to their hows
+      for(h in 1:nrow(hows)) {
+        for(ed in 1:nrow(edges)) {
+          if(edges$from[ed] == functions$id[f] & edges$to[ed] == hows$id[h] & 
+             length(str_subset(hows_id[f], paste(hows$id[h], ';'))) < 1) {
+            hows_id[f] <- if(is.na(hows_id[f])) {paste(hows$id[h], ';')} else{paste(hows_id[f], hows$id[h], ';')}
+            hows_label[f] <- if(is.na(hows_label[f])) {paste(hows$labels[h], ';')} else{paste(hows_label[f], hows$labels[h], ';')}
+            break
+          } 
+        }
+      }
     }
     
     ex <- list(
-      data.frame(cbind(container_id, container_label, function_id, function_label, entity_id, entity_label)),
+      data.frame(cbind(entity_id, entity_label, container_id, container_label, function_id, function_label, hows_id, hows_label)),
       edge_list
     )
   } else {
@@ -181,7 +210,7 @@ node_list = node_import(graph, label = NA, color = NA, container_label = NA)
 
 # Format options: "Standard" or "Format 7"
 e <- export(edge_list = edge_list, node_list = node_list, container_list = container_list, format = 'Format 7')
-export_path <- 'C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\Graphml Function-Entity.xlsx'
+export_path <- 'C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\Graphml Test Export.xlsx'
 write_xlsx(e, export_path)
 
 
