@@ -17,7 +17,7 @@ library(igraph); library(writexl); library(tidyverse); library(purrr);
 source("C:\\Users\\samanthak\\Documents\\GitHub\\TBDfun\\R\\tbd_graphml_readwrite.R")
 
 # Save the file path of the graphml file to be analyzed
-path = "C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\CFA&P_Roles.v5.graphml"
+path = "C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\CFA&P_Roles.v6.graphml"
 
 # Read in the Graphml file (attributes such as color and text cannot be blank)
 graph <- read_graphml(path)
@@ -133,6 +133,7 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
     container_label <- character()
     function_id <- character()
     function_label <- character()
+    function_desc <- character()
     entity_id <- character()
     entity_label <- character()
     hows_id <- character()
@@ -145,12 +146,14 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
           if(edges$to[ed] == functions$id[f] & edges$from[ed] == entities$id[e]) {
             function_id[f] <- functions$id[f]
             function_label[f] <- functions$labels[f]
+            function_desc[f] <- functions$description[f]
             entity_id[f] <- entities$id[e]
             entity_label[f] <- entities$labels[e]
             break
           } else if(ed == nrow(edges) & e == nrow(entities) & f > coalesce(length(function_id), 0)) {
             function_id[f] <- functions$id[f]
             function_label[f] <- functions$labels[f]
+            function_desc[f] <- functions$description[f]
             entity_id[f] <- NA
             entity_label[f] <- NA
             break
@@ -193,7 +196,7 @@ export <- function(edge_list = NA, node_list = NA, container_list = NA, format =
     }
     
     ex <- list(
-      data.frame(cbind(entity_id, entity_label, container_id, container_label, function_id, function_label, hows_id, hows_label)),
+      data.frame(cbind(entity_id, entity_label, container_id, container_label, function_id, function_label, function_desc, hows_id, hows_label)),
       edge_list
     )
   } else {
@@ -210,7 +213,7 @@ node_list = node_import(graph, label = NA, color = NA, container_label = NA)
 
 # Format options: "Standard" or "Format 7"
 e <- export(edge_list = edge_list, node_list = node_list, container_list = container_list, format = 'Format 7')
-export_path <- 'C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\Graphml Test Export.xlsx'
+export_path <- "C:/Users/samanthak/OneDrive - TBD Solutions Inc/Documents/Sam Files/MDHHS/Graphml Project/CFA&P Graphml Export Format7.xlsx"
 write_xlsx(e, export_path)
 
 

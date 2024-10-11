@@ -5,7 +5,7 @@
 # Description:  Imports an Excel file and exports a graphml file.
 
 #---------------------- Setup ----------------------
- library(writexl); library(tidyverse); library(purrr);
+library(writexl); library(tidyverse); library(purrr);
 library(readxl);library(tidygraph);
 library(igraph);library(ggraph);
 
@@ -53,7 +53,28 @@ import <- function(file_path, format = 'Standard') {
         ) %>%
       select(-entity_id, -entity_label) %>%
       distinct()
+    node_hows <- ex_in %>%
+      select(hows_id, hows_label) %>%
+      na.omit() %>%
+      mutate(
+        fill = '#FF9900',
+        labels = hows_label,
+        id = hows_id,
+        container_id = case_when(
+          length(str_subset(hows_id, '::')) == 0 ~ 'no container',
+          length(str_subset(hows_id, '::')) > 0 ~ strsplit(hows_id, "::", fixed = TRUE)[[1]][1]
+        )
+      ) %>%
+      select(-hows_id, -hows_label) %>%
+      separate_rows(labels, id, sep = ' ;') %>%
+      mutate(
+        labels = trimws(na_if(labels, '')),
+        id = trimws(na_if(id, ''))
+        ) %>%
+      distinct() %>%
+      na.omit
     node_list <- rbind(node_entities, node_functions)
+    node_list <- rbind(node_list, node_hows)
     
     container_list <- ex_in %>%
       select(container_id, container_label) %>%
@@ -110,8 +131,8 @@ import <- function(file_path, format = 'Standard') {
 
 #---------------------- Create graph from Excel ----------------------
   
-file_path <- 'C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\Graphml Function-Entity.xlsx'
-ex <- import(file_path, format = 'Standard')
+file_path <- "C:/Users/samanthak/OneDrive - TBD Solutions Inc/Documents/Sam Files/MDHHS/Graphml Project/CFA&P Graphml Export Format7.xlsx"
+ex <- import(file_path, format = 'Format 7')
 edge_list <- data.frame(ex[1])
 node_list <- data.frame(ex[2])
 container_list <- data.frame(ex[3])
@@ -119,11 +140,11 @@ container_list <- data.frame(ex[3])
 # create graph object:
 graph_obj <- tbl_graph(nodes = node_list, edges = edge_list, node_key = 'id')
 
-v(graph_obj)$width = 150
-v(graph_obj)$height = 100
+V(graph_obj)$width <- 150
+V(graph_obj)$height <- 100
 
 # create graphml file:
-write_graph(graph_obj, file = "C:\\Users\\samanthak\\OneDrive - TBD Solutions Inc\\Documents\\Sam Files\\MDHHS\\Graphml Project\\tst.graphml", format = "graphml")
+write_graph(graph_obj, file = "C:/Users/samanthak/OneDrive - TBD Solutions Inc/Documents/Sam Files/MDHHS/Graphml Project/tst.graphml", format = "graphml")
   
 # Manual changes to be made in yEd:
 #   * Go to "Edit -> Properties Mapper" and run the "Import from Excel" configuration.
@@ -134,4 +155,10 @@ write_graph(graph_obj, file = "C:\\Users\\samanthak\\OneDrive - TBD Solutions In
 #     * Then go to "Grouping -> Group" to group those nodes
 #     * Rename the container with the container label; Find this in the container_list data frame (along with all container ids)
 #     * Do this for each container
+#   * Find the container node and map the new container with those same edges. 
+#     * Delete the container nodes when done (don't forget the ones with no edges).
+#   * CTRL-A to select all nodes and set the label properties as:
+#     * Placement- Internal: Center
+#     * Size- Fit Node Width
+#     * Configuration- Cropping
 
